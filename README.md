@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 📊 Metrix-KPIs
 
-## Getting Started
+**Metrix-KPIs** es una aplicación de gestión empresarial en tiempo real diseñada para proporcionarte un control total sobre tus negocios. Monitorea ganancias, ventas, gastos, el estado de inventarios y procesos operativos desde un panel intuitivo y centralizado. Mantén el control total y optimiza el rendimiento de tus tiendas con datos actualizados al instante.
 
-First, run the development server:
+## 🌟 Características
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- 📈 **Monitoreo en Tiempo Real:** Datos actualizados al instante sobre ventas, compras, gastos y más.
+- 📊 **Indicadores de Rendimiento:** Visualiza métricas clave de rendimiento de tus negocios.
+- 📦 **Gestión de Inventarios:** Controla el estado de tus inventarios de manera eficiente.
+- 🖥️ **Panel Intuitivo:** Interfaz de usuario amigable y centralizada para facilitar la gestión.
+- 🏪 **Multi-negocios:** Administra y compara el rendimiento de múltiples tiendas.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tecnologías Utilizadas
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Frontend:**
+  - [Next.js](https://nextjs.org/)
+  - [TypeScript](https://www.typescriptlang.org/)
+  - [Tailwind CSS](https://tailwindcss.com/)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Backend:**
+  - [NestJS](https://nestjs.com/)
+  - [PostgreSQL](https://www.postgresql.org/)
 
-## Learn More
+## ⚙️ Requisitos Previos
 
-To learn more about Next.js, take a look at the following resources:
+Antes de empezar, asegúrate de tener instalados los siguientes requisitos:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Node.js (v14 o superior)
+- npm o yarn
+- PostgreSQL
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## 🚀 Instalación
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/tuusuario/metrix-kpis.git
+   cd metrix-kpis
