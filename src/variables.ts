@@ -12,6 +12,6 @@ export const Titles = {
     Fifth: "Productos",
     Sixth: "Clientes",
     Seventh: "Promociones",
-    Eighth: "Libro rojo",
+    Eighth: "Libro Rojo",
     Nineth: "Auditorias"
 };

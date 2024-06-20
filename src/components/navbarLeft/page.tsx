@@ -9,11 +9,11 @@ export default function NavBar() {
         <a href="/ventas">{Titles.Second}</a>
         <a href="/compras">{Titles.Third}</a>
         <a href="/metricas">{Titles.Fourth}</a>
-        <a href="">{Titles.Fifth}</a>
-        <a href="">{Titles.Sixth}</a>
-        <a href="">{Titles.Seventh}</a>
-        <a href="">{Titles.Eighth}</a>
-        <a href="">{Titles.Nineth}</a>
+        <a href="/productos">{Titles.Fifth}</a>
+        <a href="/clientes">{Titles.Sixth}</a>
+        <a href="/promociones">{Titles.Seventh}</a>
+        <a href="libro_rojo">{Titles.Eighth}</a>
+        <a href="/auditorias">{Titles.Nineth}</a>
 
     </div>
   )
