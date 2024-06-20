@@ -1,12 +1,16 @@
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import NavBarLeft from "@/components/navbarLeft/page";
+import NavBarTop from "@/components/navbarTop/page";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Don Manuel Grill",
-  description: "Metricas exactas de ventas",
+  description: "Metricas exactas de operaciones",
 };
 
 export default function RootLayout({
@@ -15,8 +19,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="es">
+      <body className="flex ">
+        <NavBarTop />
+        <NavBarLeft />
+        {children}
+      </body>
+
     </html>
   );
 }
+
+
