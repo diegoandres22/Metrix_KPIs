@@ -5,6 +5,8 @@ import "./globals.css";
 import NavBarLeft from "@/components/navbarLeft/page";
 import NavBarTop from "@/components/navbarTop/page";
 
+import { Providers } from "@/redux/provider";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,11 +22,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className="flex ">
-        <NavBarTop />
-        <NavBarLeft />
-        {children}
-      </body>
+      <Providers>
+        <body className="flex ">
+          <NavBarTop />
+          <NavBarLeft />
+          {children}
+
+        </body>
+      </Providers>
 
     </html>
   );
