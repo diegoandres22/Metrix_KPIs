@@ -13,10 +13,10 @@ export default function NavBar() {
 
   const title = useSelector((state: RootState) => state.titles);
   const dispatch = useAppDispatch();
-  const getLinkClasses = (currentTitle: string) => title.title === currentTitle ? 'text-xl font-bold text-buttomClick' : '';
+  const getLinkClasses = (currentTitle: string) => title.title === currentTitle ? 'font-extrabold text-buttomClick' : '';
 
   return (
-    <div className='flex w-[20vw] h-screen bg-white bg-opacity-10 flex-col p-5 pt-20 gap-5'>
+    <div className='flex w-[20vw] h-screen bg-white bg-opacity-10 flex-col p-5 pt-20 gap-5 '>
       <Link
         href="/start"
         onClick={() => dispatch(setTitle(Titles.First))}
@@ -25,8 +25,8 @@ export default function NavBar() {
         {Titles.First}
       </Link>
 
-      <Accordion allowMultiple>
-        <AccordionItem>
+      <Accordion allowMultiple >
+        <AccordionItem className='border-none '>
           <AccordionButton>
             <Box as='span' flex='1' textAlign='left'>
               Ventas
@@ -105,14 +105,6 @@ export default function NavBar() {
         className={getLinkClasses(Titles.Seventh)}
       >
         {Titles.Seventh}
-      </Link>
-
-      <Link
-        href="/red_book"
-        onClick={() => dispatch(setTitle(Titles.Eighth))}
-        className={getLinkClasses(Titles.Eighth)}
-      >
-        {Titles.Eighth}
       </Link>
 
       <Link

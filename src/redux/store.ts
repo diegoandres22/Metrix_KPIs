@@ -1,14 +1,21 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { Action, ThunkAction, configureStore } from "@reduxjs/toolkit";
 import { titleSlice } from "./slices/titleSlice";
+import salesReducer from "./slices/saleSlice";
 
-const store = configureStore({
+export const store = configureStore({
     reducer: {
         titles: titleSlice.reducer,
+        salesReducer
     },
 });
 
 
 export type RootState = ReturnType<typeof store.getState>;
 export type appDispatch = typeof store.dispatch
+export type AppThunk<ReturnType = void> = ThunkAction<
+    ReturnType,
+    RootState,
+    unknown,
+    Action<string>
+>;
 
-export default store;

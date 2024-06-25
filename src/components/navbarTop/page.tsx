@@ -1,6 +1,6 @@
 'use client'
 
-import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
+import { Menu, MenuButton, MenuItem, MenuList, useColorModeValue } from '@chakra-ui/react';
 import React from 'react'
 import { FaUserCircle } from "react-icons/fa";
 import { useSelector } from 'react-redux';
@@ -11,7 +11,11 @@ import { RootState } from "@/redux/store";
 export default function navbarTop() {
 
 
-    const title = useSelector((state:RootState)=> state.titles)
+    const title = useSelector((state: RootState) => state.titles)
+
+    const bgColor = useColorModeValue("gray.800", "gray.800");
+    const textColor = useColorModeValue("white", "white");
+    const menuHoverBg = useColorModeValue("gray.700", "gray.700");
 
 
     return (
@@ -24,10 +28,17 @@ export default function navbarTop() {
                     <MenuButton>
                         <FaUserCircle className="text-4xl"></FaUserCircle>
                     </MenuButton>
-                    <MenuList>
-                        <MenuItem>Perfil</MenuItem>
-                        <MenuItem>Ajustes</MenuItem>
-                        <MenuItem>Cerrar sesión</MenuItem>
+                    <MenuList bg={bgColor} color={textColor}
+                        border="none">
+                        <MenuItem _hover={{ bg: menuHoverBg }} bg={bgColor}>
+                            Perfil
+                        </MenuItem>
+                        <MenuItem _hover={{ bg: menuHoverBg }} bg={bgColor}>
+                            Ajustes
+                        </MenuItem>
+                        <MenuItem _hover={{ bg: menuHoverBg }} bg={bgColor}>
+                            Cerrar sesión
+                        </MenuItem>
                     </MenuList>
                 </Menu>
 

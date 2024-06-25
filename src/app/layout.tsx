@@ -1,12 +1,10 @@
-
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "../app/global.css";
 import NavBarLeft from "@/components/navbarLeft/page";
 import NavBarTop from "@/components/navbarTop/page";
-
 import { Providers } from "@/redux/provider";
-
+import { ChakraProvider } from "@chakra-ui/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,24 +13,19 @@ export const metadata: Metadata = {
   description: "Metricas exactas de operaciones",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <Providers>
-        <body className="flex ">
-          <NavBarTop />
-          <NavBarLeft />
-          {children}
+      <body className="bg-backgColor text-white flex">
+        <Providers>
+          <ChakraProvider>
+              <NavBarTop />
+              <NavBarLeft />
 
-        </body>
-      </Providers>
-
+              {children}
+          </ChakraProvider>
+        </Providers>
+      </body>
     </html>
   );
 }
-
-
