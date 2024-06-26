@@ -1,12 +1,12 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppThunk, RootState } from '../store';
-import { fetchSales } from '../services/saleService';
+import { RootState } from '../store';
+import { getTickets } from '../services/saleService';
 
 interface SalesState {
     sales: any[];
     loading: boolean;
-    error: string | null;
+    error: string | null | undefined;
 }
 
 const initialState: SalesState = {
@@ -14,16 +14,6 @@ const initialState: SalesState = {
     loading: false,
     error: null,
 };
-
-// export const loadSales = (dateFrom: string, dateEnd: string): AppThunk => async (dispatch) => {
-//     try {
-//         dispatch(fetchSalesStart());
-//         const data = await fetchSales(dateFrom, dateEnd);
-//         dispatch(fetchSalesSuccess(data));
-//     } catch (error: any) {
-//         dispatch(fetchSalesFailure(error.message));
-//     }
-// };
 
 const salesSlice = createSlice({
     name: 'sales',
@@ -41,6 +31,23 @@ const salesSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(getTickets.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getTickets.fulfilled, (state, action) => {
+                state.loading = false;
+
+                state.sales = action.payload;
+            })
+            .addCase(getTickets.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
     },
 });
 

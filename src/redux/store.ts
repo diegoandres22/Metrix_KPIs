@@ -5,7 +5,7 @@ import salesReducer from "./slices/saleSlice";
 export const store = configureStore({
     reducer: {
         titles: titleSlice.reducer,
-        salesReducer
+        sales: salesReducer
     },
 });
 
