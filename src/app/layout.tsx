@@ -5,6 +5,7 @@ import NavBarLeft from "@/components/navbarLeft/page";
 import NavBarTop from "@/components/navbarTop/page";
 import { Providers } from "@/redux/provider";
 import { ChakraProvider } from "@chakra-ui/react";
+import { NextUIProvider } from "@nextui-org/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,10 +20,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-backgColor text-white flex">
         <Providers>
           <ChakraProvider>
-              <NavBarTop />
-              <NavBarLeft />
+            <NextUIProvider >
+              <main className="flex dark text-foreground bg-backgroundColor">
 
-              {children}
+                <NavBarTop />
+                <NavBarLeft />
+
+                {children}
+              </main>
+            </NextUIProvider>
           </ChakraProvider>
         </Providers>
       </body>

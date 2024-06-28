@@ -15,6 +15,7 @@ export default function NavBar() {
   const dispatch = useAppDispatch();
   const getLinkClasses = (currentTitle: string) => title.title === currentTitle ? 'font-extrabold text-buttomClick' : '';
 
+
   return (
     <div className='flex w-[20vw] h-screen bg-white bg-opacity-10 flex-col p-5 pt-20 gap-5 '>
       <Link
@@ -26,19 +27,18 @@ export default function NavBar() {
       </Link>
 
       <Accordion allowMultiple >
-        <AccordionItem className='border-none '>
-          <AccordionButton>
-            <Box as='span' flex='1' textAlign='left'>
+        <AccordionItem className='border-none'>
+          <AccordionButton >
+            <Box as='span' flex='1' textAlign='left' >
               Ventas
             </Box>
             <AccordionIcon />
           </AccordionButton>
-          <AccordionPanel className=''>
-            <ul className='flex flex-col gap-4 mt-4 ml-2'>
-              <li>
+          <AccordionPanel >
+            <ul className='flex flex-col gap-4 mt-4 ml-2' >
+              <li  >
                 <Link
                   href="/ventas/resumen"
-                  onClick={() => dispatch(setTitle(Titles.Sales1))}
                   className={getLinkClasses(Titles.Sales1)}
                 >
                   {Titles.Sales1}

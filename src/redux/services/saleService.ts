@@ -1,17 +1,22 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { Ticket } from '@/types/ticket'
+import { endpoints } from '@/variables';
 
-export const getTickets = createAsyncThunk<Ticket[], void, { rejectValue: string }>(
-    '',
-    async (_, { rejectWithValue }) => {
+
+interface DateParams {
+    dateFrom: string;
+    dateEnd: string;
+}
+
+export const getTickets = createAsyncThunk<Ticket[], DateParams, { rejectValue: string }>(
+    'tickets/getTickets',
+    async ({ dateFrom, dateEnd }, { rejectWithValue }) => {
         try {
-            alert("pido")
-            const response = await axios.get('http://localhost:3001/api/xconnect/api/ExtractionData/PurchaseFull?dateFrom=20240625&dateEnd=20240627');
+
+            const response = await axios.get(endpoints.salesFull(dateFrom, dateEnd));
 
             const arrTickets = response.data;
-
-            console.log("conseguí:", arrTickets);
 
             return arrTickets;
         } catch (error) {

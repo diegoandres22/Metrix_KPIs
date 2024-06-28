@@ -1,8 +1,4 @@
 
-
-
-
-
 // Etiquetas de panel de control lateral
 export const Titles = {
     First: "Inicio",
@@ -21,16 +17,13 @@ export const Titles = {
 
 //Variables Endspoints para consumo de api 
 
-export const API_BASE_URL_ventas = 'http://26.96.128.174:9090/xconnect/api/ExtractionData';
-export const API_BASE_URL_compras = 'http://26.96.128.174:9090/xconnect/api/ExtractionData';
-export const API_BASE_URL_pagos = 'http://26.96.128.174:9090/xconnect/api/ExtractionData';
-
+export const API_BASE_URL = 'http://localhost:3001/api/xconnect/api/ExtractionData';
 
 export const endpoints = {
     salesFull: (dateFrom: string, dateEnd: string) =>
-        `${API_BASE_URL_ventas}/SalesFull?dateFrom=${dateFrom}&dateEnd=${dateEnd}`,
+        `${API_BASE_URL}/SalesFull?dateFrom=${dateFrom}&dateEnd=${dateEnd}`,
     purchaseFull: (dateFrom: string, dateEnd: string) =>
-        `${API_BASE_URL_compras}/PurchaseFull?dateFrom=${dateFrom}&dateEnd=${dateEnd}`,
+        `${API_BASE_URL}/PurchaseFull?dateFrom=${dateFrom}&dateEnd=${dateEnd}`,
     SalesPayFull: (dateFrom: string, dateEnd: string) =>
-        `${API_BASE_URL_compras}/SalesPay?dateFrom=${dateFrom}&dateEnd=${dateEnd}`,
+        `${API_BASE_URL}/SalesPay?dateFrom=${dateFrom}&dateEnd=${dateEnd}`,
 };

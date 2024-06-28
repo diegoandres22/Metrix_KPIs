@@ -9,17 +9,14 @@ export default function Actual() {
   const dispatch = useAppDispatch();
 
 
-  const handleClick = () => {
-    dispatch(getTickets());
-  };
+  // const handleClick = () => {
+  //   dispatch(getTickets());
+  // };
 
   return (
     <div className='mt-[4em]'>
       <h1>Yo soy Actual</h1>
-      Cargar Ventas
-      <Button colorScheme='teal' variant='outline' onClick={handleClick}>
-        Peticion API
-      </Button>
+
     </div>
   );
 }

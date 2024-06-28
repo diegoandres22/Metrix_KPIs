@@ -5,11 +5,12 @@
 :root {
   --foreground-rgb: 255, 255, 255;
   --background-rgb: 10, 10, 25;
+  --backgroundColor: #0A0A19;
 
-  --backgroundColor: '#0A0A19'
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
+  background-color: var(--backgroundColor);
 }
+
