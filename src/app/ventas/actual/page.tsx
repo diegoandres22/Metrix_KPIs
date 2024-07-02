@@ -1,17 +1,19 @@
 'use client'
-import React from 'react';
-import { Button } from '@chakra-ui/react';
-import { getTickets } from '@/redux/services/saleService'
+import React, { useEffect } from 'react';
 
 import { useAppDispatch } from '@/redux/services/hooks';
+import { setTitle } from '@/redux/slices/titleSlice';
+import { Titles } from '@/variables';
 
 export default function Actual() {
+
+
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    dispatch(setTitle(Titles.Sales2))
 
-  // const handleClick = () => {
-  //   dispatch(getTickets());
-  // };
+  }, []);
 
   return (
     <div className='mt-[4em]'>

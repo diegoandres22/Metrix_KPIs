@@ -20,7 +20,6 @@ export default function NavBar() {
     <div className='flex w-[20vw] h-screen bg-white bg-opacity-10 flex-col p-5 pt-20 gap-5 '>
       <Link
         href="/start"
-        onClick={() => dispatch(setTitle(Titles.First))}
         className={getLinkClasses(Titles.First)}
       >
         {Titles.First}
@@ -47,7 +46,6 @@ export default function NavBar() {
               <li>
                 <Link
                   href="/ventas/actual"
-                  onClick={() => dispatch(setTitle(Titles.Sales2))}
                   className={getLinkClasses(Titles.Sales2)}
                 >
                   {Titles.Sales2}
@@ -56,7 +54,6 @@ export default function NavBar() {
               <li>
                 <Link
                   href="/ventas/metodos"
-                  onClick={() => dispatch(setTitle(Titles.Sales3))}
                   className={getLinkClasses(Titles.Sales3)}
                 >
                   {Titles.Sales3}
@@ -69,7 +66,6 @@ export default function NavBar() {
 
       <Link
         href="/purchases"
-        onClick={() => dispatch(setTitle(Titles.Third))}
         className={getLinkClasses(Titles.Third)}
       >
         {Titles.Third}
@@ -77,7 +73,6 @@ export default function NavBar() {
 
       <Link
         href="/metrics"
-        onClick={() => dispatch(setTitle(Titles.Fourth))}
         className={getLinkClasses(Titles.Fourth)}
       >
         {Titles.Fourth}
@@ -85,7 +80,6 @@ export default function NavBar() {
 
       <Link
         href="/products"
-        onClick={() => dispatch(setTitle(Titles.Fifth))}
         className={getLinkClasses(Titles.Fifth)}
       >
         {Titles.Fifth}
@@ -93,7 +87,6 @@ export default function NavBar() {
 
       <Link
         href="/customers"
-        onClick={() => dispatch(setTitle(Titles.Sixth))}
         className={getLinkClasses(Titles.Sixth)}
       >
         {Titles.Sixth}
@@ -101,7 +94,6 @@ export default function NavBar() {
 
       <Link
         href="/promotions"
-        onClick={() => dispatch(setTitle(Titles.Seventh))}
         className={getLinkClasses(Titles.Seventh)}
       >
         {Titles.Seventh}
@@ -109,7 +101,6 @@ export default function NavBar() {
 
       <Link
         href="/audits"
-        onClick={() => dispatch(setTitle(Titles.Nineth))}
         className={getLinkClasses(Titles.Nineth)}
       >
         {Titles.Nineth}
