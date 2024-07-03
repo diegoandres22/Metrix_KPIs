@@ -1,18 +1,25 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
-import { getTickets } from '../services/saleService';
+import { getTicketsForPeriods } from '../services/saleService';
 
 interface SalesState {
     sales: any[];
     loading: boolean;
-    error: string | null | undefined;
+    error: string | null | undefined | unknown;
+    totalSumOfSales: number;
+    totalSumOfTaxes: number,
+    totalSumOfServices: number
 }
 
 const initialState: SalesState = {
     sales: [],
     loading: false,
     error: null,
+    totalSumOfSales: 0,
+    totalSumOfTaxes: 0,
+    totalSumOfServices: 0
+
 };
 
 const salesSlice = createSlice({
@@ -34,16 +41,18 @@ const salesSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getTickets.pending, (state) => {
+            .addCase(getTicketsForPeriods.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(getTickets.fulfilled, (state, action) => {
+            .addCase(getTicketsForPeriods.fulfilled, (state, action) => {
                 state.loading = false;
+                state.totalSumOfServices = action.payload.totalService;
+                state.totalSumOfSales = action.payload.totalSales;
+                state.totalSumOfTaxes = action.payload.totalTaxes
 
-                state.sales = action.payload;
             })
-            .addCase(getTickets.rejected, (state, action) => {
+            .addCase(getTicketsForPeriods.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })

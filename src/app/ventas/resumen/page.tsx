@@ -1,15 +1,17 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Stat, StatHelpText, StatLabel, StatNumber, } from '@chakra-ui/react'
 import { Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis } from 'recharts';
 import { setTitle } from '@/redux/slices/titleSlice';
 import { Titles } from '@/variables';
 import { useAppDispatch } from '@/redux/services/hooks';
-import { getTickets } from '@/redux/services/saleService';
+import { getTicketsForPeriods } from '@/redux/services/saleService';
 import { RootState } from '@/redux/store';
 import { useSelector } from 'react-redux';
 import { Autocomplete, AutocompleteItem, Button, DatePicker, DateValue } from '@nextui-org/react';
+
+import { getLocalTimeZone, today } from "@internationalized/date";
+import { enqueueSnackbar } from 'notistack';
 
 interface InputValue {
   type: string;
@@ -33,6 +35,11 @@ export default function Resumen() {
   ]
 
   const salesLoading = useSelector((state: RootState) => state.sales.loading)
+  const totalSumOfSales = useSelector((state: RootState) => state.sales.totalSumOfSales)
+  const totalSumOfServices = useSelector((state: RootState) => state.sales.totalSumOfServices)
+  const totalSumOfTaxes = useSelector((state: RootState) => state.sales.totalSumOfTaxes)
+
+
 
   const [inputValue, setInputValue] = useState({
     type: "",
@@ -55,9 +62,6 @@ export default function Resumen() {
 
   const handleInputChange = (value: DateValue, field: keyof InputValue) => {
 
-    console.log('CALENDARIO', value);
-
-
     let year = value.year.toString().padStart(4, '0');
     let month = value.month.toString().padStart(2, '0');
     let day = value.day.toString().padStart(2, '0');
@@ -73,7 +77,6 @@ export default function Resumen() {
     }
     )
 
-
     setInputValue({
       ...inputValue,
       [field]: YYYYMMDD
@@ -87,25 +90,49 @@ export default function Resumen() {
 
 
   const handleCalculate = () => {
+    const numFecha1 = parseInt(inputValue.from, 10);
+    const numFecha2 = parseInt(inputValue.to, 10);
+    if (numFecha1 > numFecha2) {
+
+      enqueueSnackbar('Error en la fecha', { variant: 'error' });
+      return
+    }
     if (inputValue.from && inputValue.to) {
-      dispatch(getTickets({ dateFrom: inputValue.from, dateEnd: inputValue.to }));
+      dispatch(getTicketsForPeriods({ dateFrom: inputValue.from, dateEnd: inputValue.to }));
     }
   };
+
+
 
 
   useEffect(() => {
     dispatch(setTitle(Titles.Sales1))
 
+    const { year, day, month } = today(getLocalTimeZone())
+
+    let YEAR = year.toString().padStart(4, '0');
+    let MONTH = month.toString().padStart(2, '0');
+    let DAY = day.toString().padStart(2, '0');
+
+    const newInputValue = {
+      ...inputValue,
+      to: YEAR + MONTH + DAY,
+      from: YEAR + MONTH + DAY
+    };
+
+    setInputValue(newInputValue)
+
   }, []);
 
 
   useEffect(() => {
-    console.log("soy InputValue: ", inputValue);
 
   }, [inputValue]);
 
 
-
+  if (typeof window === 'undefined') {
+    return null;
+  }
   return (
     <div className='mt-[4em] '>
       <div className="flex w-[80vw] h-10% p-5 justify-center items-center gap-10">
@@ -114,7 +141,7 @@ export default function Resumen() {
           <Autocomplete
             size='sm'
             label="Tienda"
-            className="max-w-xs " >
+            className="max-w-xs  " >
 
             <AutocompleteItem key={'1'} >
               Todos
@@ -141,18 +168,22 @@ export default function Resumen() {
             size='sm'
             label={"Desde"}
             name="from"
-            showMonthAndYearPickers={true}
+            defaultValue={today(getLocalTimeZone())}
+            maxValue={today(getLocalTimeZone())}
+
           />
         </div>
 
         <div className="">
           <DatePicker
             onChange={(date) => handleInputChange(date, 'to')}
-            showMonthAndYearPickers={true}
             size='sm'
             label={"Hasta"}
             name="to"
-            className="max-w-sm" />
+            className="max-w-sm"
+            defaultValue={today(getLocalTimeZone())}
+            maxValue={today(getLocalTimeZone())}
+          />
         </div>
 
         <Button className="bg-green-400 text-black" variant="shadow"
@@ -175,13 +206,18 @@ export default function Resumen() {
           <Bar dataKey="Gastos" fill="#C71585" />
         </BarChart>
 
-        <div className='flex items-center justify-center m-auto '>
-          <Stat >
-            <StatLabel>Total en ventas</StatLabel>
-            <StatNumber>$240.00</StatNumber>
+        <div className='flex flex-col items-center justify-center m-auto '>
 
-            {inputDate.from.length > 0 && inputDate.to.length > 0 && <StatHelpText >{inputDate.from} - {inputDate.to} </StatHelpText>}
-          </Stat>
+          <h3>Total en ventas </h3>
+          {totalSumOfSales > 0 && <h2 className='flex gap-2' >{totalSumOfSales}<p> $ </p></h2>}
+
+          <div className='flex flex-col text-slate-400 items-center justify-center'>
+
+            {inputDate.from.length > 0 && inputDate.to.length > 0 && <h3>{inputDate.from} - {inputDate.to}</h3>}
+
+            {totalSumOfServices > 0 && <h3 >Servicios: {totalSumOfServices} </h3>}
+            {totalSumOfTaxes > 0 && <h3 >Impuestos: {totalSumOfTaxes} </h3>}
+          </div>
         </div>
 
       </div>
