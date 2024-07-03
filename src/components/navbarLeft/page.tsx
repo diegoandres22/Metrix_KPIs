@@ -13,32 +13,31 @@ export default function NavBar() {
 
   const title = useSelector((state: RootState) => state.titles);
   const dispatch = useAppDispatch();
-  const getLinkClasses = (currentTitle: string) => title.title === currentTitle ? 'text-xl font-bold text-buttomClick' : '';
+  const getLinkClasses = (currentTitle: string) => title.title === currentTitle ? 'font-extrabold text-buttomClick' : '';
+
 
   return (
-    <div className='flex w-[20vw] h-screen bg-white bg-opacity-10 flex-col p-5 pt-20 gap-5'>
+    <div className='flex w-[20vw] h-screen bg-white bg-opacity-10 flex-col p-5 pt-20 gap-5 '>
       <Link
         href="/start"
-        onClick={() => dispatch(setTitle(Titles.First))}
         className={getLinkClasses(Titles.First)}
       >
         {Titles.First}
       </Link>
 
-      <Accordion allowMultiple>
-        <AccordionItem>
-          <AccordionButton>
-            <Box as='span' flex='1' textAlign='left'>
+      <Accordion allowMultiple >
+        <AccordionItem className='border-none'>
+          <AccordionButton >
+            <Box as='span' flex='1' textAlign='left' >
               Ventas
             </Box>
             <AccordionIcon />
           </AccordionButton>
-          <AccordionPanel className=''>
-            <ul className='flex flex-col gap-4 mt-4 ml-2'>
-              <li>
+          <AccordionPanel >
+            <ul className='flex flex-col gap-4 mt-4 ml-2' >
+              <li  >
                 <Link
                   href="/ventas/resumen"
-                  onClick={() => dispatch(setTitle(Titles.Sales1))}
                   className={getLinkClasses(Titles.Sales1)}
                 >
                   {Titles.Sales1}
@@ -47,7 +46,6 @@ export default function NavBar() {
               <li>
                 <Link
                   href="/ventas/actual"
-                  onClick={() => dispatch(setTitle(Titles.Sales2))}
                   className={getLinkClasses(Titles.Sales2)}
                 >
                   {Titles.Sales2}
@@ -56,7 +54,6 @@ export default function NavBar() {
               <li>
                 <Link
                   href="/ventas/metodos"
-                  onClick={() => dispatch(setTitle(Titles.Sales3))}
                   className={getLinkClasses(Titles.Sales3)}
                 >
                   {Titles.Sales3}
@@ -69,7 +66,6 @@ export default function NavBar() {
 
       <Link
         href="/purchases"
-        onClick={() => dispatch(setTitle(Titles.Third))}
         className={getLinkClasses(Titles.Third)}
       >
         {Titles.Third}
@@ -77,7 +73,6 @@ export default function NavBar() {
 
       <Link
         href="/metrics"
-        onClick={() => dispatch(setTitle(Titles.Fourth))}
         className={getLinkClasses(Titles.Fourth)}
       >
         {Titles.Fourth}
@@ -85,7 +80,6 @@ export default function NavBar() {
 
       <Link
         href="/products"
-        onClick={() => dispatch(setTitle(Titles.Fifth))}
         className={getLinkClasses(Titles.Fifth)}
       >
         {Titles.Fifth}
@@ -93,7 +87,6 @@ export default function NavBar() {
 
       <Link
         href="/customers"
-        onClick={() => dispatch(setTitle(Titles.Sixth))}
         className={getLinkClasses(Titles.Sixth)}
       >
         {Titles.Sixth}
@@ -101,23 +94,13 @@ export default function NavBar() {
 
       <Link
         href="/promotions"
-        onClick={() => dispatch(setTitle(Titles.Seventh))}
         className={getLinkClasses(Titles.Seventh)}
       >
         {Titles.Seventh}
       </Link>
 
       <Link
-        href="/red_book"
-        onClick={() => dispatch(setTitle(Titles.Eighth))}
-        className={getLinkClasses(Titles.Eighth)}
-      >
-        {Titles.Eighth}
-      </Link>
-
-      <Link
         href="/audits"
-        onClick={() => dispatch(setTitle(Titles.Nineth))}
         className={getLinkClasses(Titles.Nineth)}
       >
         {Titles.Nineth}
