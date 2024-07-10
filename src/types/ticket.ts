@@ -1,4 +1,5 @@
 export interface Ticket {
+    status: string;
     header_id: number,
     number_document: string,
     number_control: string,
@@ -28,5 +29,13 @@ export interface Ticket {
     item_net_price: number,
     item_total: number,
     exchange_date_day: number,
-    exchange_date_day_date_document: number
+    exchange_date_day_date_document: number,
+    net_price: number,
+    total: number,
+    tax_value: number,
+    service_value: number,
+    product_total: number,
+
+    product_net_price: number,
 }
+

@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { Ticket } from '@/types/ticket'
 import { endpoints } from '@/variables';
+import { enqueueSnackbar } from 'notistack';
+import { Factura } from '@/types/factureInt';
 
 
 interface DateParams {
@@ -9,31 +10,12 @@ interface DateParams {
     dateEnd: string;
 }
 
-interface Product {
-    producto: string;
-    cantidad: number;
-    familia: string;
-    tipo: string;
-}
 
-interface Factura {
-    factura: number,
-    orden: number,
-    sub_total_Factura: number,
-    total_Factura: number,
-    nombre_cliente: string,
-    cedula_cliente: string,
-    fecha: string,
-    total_productos: Product[],
-    servicio: number,
-    porcentaje_impuesto: number,
-    total_impuesto: number,
-    total_compra: number,
-}
 interface ResponseTicketsForPeriods {
     totalSales: number,
     totalService: number,
-    totalTaxes: number
+    totalTaxes: number,
+    subTotal: number
 
 }
 
@@ -45,9 +27,6 @@ export const getTicketsForPeriods = createAsyncThunk<ResponseTicketsForPeriods, 
             const response = await axios.get(endpoints.salesFull(dateFrom, dateEnd));
 
             const arrTickets = response.data;
-
-            console.log("tengo arrayTickets : ", arrTickets);
-
 
             const salesArray: Factura[] = [];
 
@@ -70,6 +49,15 @@ export const getTicketsForPeriods = createAsyncThunk<ResponseTicketsForPeriods, 
                     service_value,
                     tax_percentage,
                     tax_value,
+                    product_total,
+                    product_net_price,
+                    product_subtotal,
+                    product_tax_value,
+                    net_price,
+                    customer_address,
+                    customer_phone,
+                    status,
+                    product_code
                 } = ticket;
 
                 let existingInvoice = salesArray.find((invoice) => invoice.orden === order_id);
@@ -80,14 +68,25 @@ export const getTicketsForPeriods = createAsyncThunk<ResponseTicketsForPeriods, 
                         cantidad: quantity,
                         familia: family_name,
                         tipo: product_type_name,
+                        neto_producto: product_net_price,
+                        codigo: product_code,
+
+                        total_producto: product_total,
+                        sub_total_producto: product_subtotal,
+                        impuesto_producto: product_tax_value,
                     });
 
                 } else {
                     const newInvoice: Factura = {
                         factura: bill_id,
                         orden: order_id,
-                        sub_total_Factura: subtotal,
-                        total_Factura: total,
+
+                        sub_total_factura: subtotal,
+                        total_factura: total,
+                        impuesto_factura: tax_value,
+                        neto_factura: net_price,
+                        direccion_cliente: customer_address,
+                        numero_cliente: customer_phone,
                         nombre_cliente: customer_name,
                         cedula_cliente: customer_identification,
                         fecha: bill_datetime_string,
@@ -96,32 +95,138 @@ export const getTicketsForPeriods = createAsyncThunk<ResponseTicketsForPeriods, 
                             cantidad: quantity,
                             familia: family_name,
                             tipo: product_type_name,
+                            neto_producto: product_net_price,
+                            codigo: product_code,
+                            total_producto: product_total,
+                            sub_total_producto: product_subtotal,
+                            impuesto_producto: product_tax_value,
                         }],
                         servicio: service_value,
                         porcentaje_impuesto: tax_percentage,
-                        total_impuesto: tax_value,
-                        total_compra: total,
+                        estado: status
                     };
 
                     salesArray.push(newInvoice);
                 }
             });
 
-            const totalSales = parseFloat(salesArray.reduce((total: number, ticket: Factura) => total + ticket.total_Factura, 0).toFixed(2));
+            const totalSales = parseFloat(salesArray.reduce((total: number, ticket: Factura) => total + ticket.total_factura, 0).toFixed(2));
             const totalService = parseFloat(salesArray.reduce((total: number, ticket: Factura) => total + ticket.servicio, 0).toFixed(2));
-            const totalTaxes = parseFloat(salesArray.reduce((total: number, ticket: Factura) => total + ticket.total_impuesto, 0).toFixed(2));
-
-
-            console.log("esto hice: ", salesArray);
+            const totalTaxes = parseFloat(salesArray.reduce((total: number, ticket: Factura) => total + ticket.impuesto_factura, 0).toFixed(2));
+            const totalVentaNeta = parseFloat(salesArray.reduce((total: number, ticket: Factura) => total + ticket.neto_factura, 0).toFixed(2));
 
             return {
                 totalSales: totalSales,
                 totalService: totalService,
-                totalTaxes: totalTaxes
+                totalTaxes: totalTaxes,
+                subTotal: totalVentaNeta,
             };
         } catch (error) {
-            console.error("ERROR:", error)
+            console.log(error);
+
+            enqueueSnackbar('Error en la petición a la API', { variant: 'error' });
             return rejectWithValue('No se pudieron obtener los tickets.');
+        }
+    }
+);
+export const getFacturesForPeriods = createAsyncThunk<Factura[], DateParams, { rejectValue: string }>(
+    'tickets/getFactures',
+    async ({ dateFrom, dateEnd }, { rejectWithValue }) => {
+        try {
+
+            const response = await axios.get(endpoints.salesFull(dateFrom, dateEnd));
+
+            const arrTickets = response.data;
+
+            const salesArray: Factura[] = [];
+
+            arrTickets.forEach((ticket: any) => {
+
+                const {
+                    bill_id,
+                    order_id,
+                    subtotal,
+                    total,
+                    customer_name,
+                    customer_identification,
+                    bill_datetime_string,
+                    product_name,
+                    quantity,
+                    family_name,
+                    product_type_name,
+                    service_value,
+                    tax_percentage,
+                    tax_value,
+                    product_total,
+                    product_net_price,
+                    product_subtotal,
+                    product_tax_value,
+                    net_price,
+                    customer_phone,
+                    customer_address,
+                    status,
+                    product_code,
+                } = ticket;
+
+                let existingInvoice = salesArray.find((invoice) => invoice.orden === order_id);
+
+                if (existingInvoice) {
+                    existingInvoice.total_productos.push({
+                        producto: product_name,
+                        cantidad: quantity,
+                        familia: family_name,
+                        tipo: product_type_name,
+                        neto_producto: product_net_price,
+                        codigo: product_code,
+
+                        total_producto: product_total,
+                        sub_total_producto: product_subtotal,
+                        impuesto_producto: product_tax_value,
+                    });
+
+                } else {
+                    const newInvoice: Factura = {
+                        factura: bill_id,
+                        orden: order_id,
+
+                        sub_total_factura: subtotal,
+                        total_factura: total,
+                        impuesto_factura: tax_value,
+                        neto_factura: net_price,
+
+
+                        nombre_cliente: customer_name,
+                        cedula_cliente: customer_identification,
+                        fecha: bill_datetime_string,
+                        total_productos: [{
+                            producto: product_name,
+                            cantidad: quantity,
+                            familia: family_name,
+                            tipo: product_type_name,
+                            neto_producto: product_net_price,
+                            codigo: product_code,
+                            total_producto: product_total,
+                            sub_total_producto: product_subtotal,
+                            impuesto_producto: product_tax_value,
+                        }],
+                        servicio: service_value,
+                        porcentaje_impuesto: tax_percentage,
+
+                        numero_cliente: customer_phone,
+                        direccion_cliente: customer_address,
+                        estado: status
+                    };
+
+                    salesArray.push(newInvoice);
+                }
+            });
+
+            return salesArray;
+            ;
+        } catch (error) {
+
+            enqueueSnackbar('Error en la petición a la API', { variant: 'error' });
+            return rejectWithValue('No se pudieron obtener las facturas.');
         }
     }
 );

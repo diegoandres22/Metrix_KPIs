@@ -1,24 +1,29 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
-import { getTicketsForPeriods } from '../services/saleService';
+import { getFacturesForPeriods, getTicketsForPeriods } from '../services/saleService';
+import { Factura } from '@/types/factureInt';
+
+
 
 interface SalesState {
-    sales: any[];
+    salesFiltered: Factura[];
     loading: boolean;
     error: string | null | undefined | unknown;
     totalSumOfSales: number;
     totalSumOfTaxes: number,
-    totalSumOfServices: number
+    totalSumOfServices: number,
+    subTotal: number
 }
 
 const initialState: SalesState = {
-    sales: [],
+    salesFiltered: [],
     loading: false,
     error: null,
     totalSumOfSales: 0,
     totalSumOfTaxes: 0,
-    totalSumOfServices: 0
+    totalSumOfServices: 0,
+    subTotal: 0
 
 };
 
@@ -27,16 +32,10 @@ const salesSlice = createSlice({
     initialState,
     reducers: {
         fetchSalesStart(state) {
-            state.loading = true;
-            state.error = null;
         },
-        fetchSalesSuccess(state, action: PayloadAction<any[]>) {
-            state.loading = false;
-            state.sales = action.payload;
+        fetchSalesSuccess(state, action: PayloadAction) {
         },
-        fetchSalesFailure(state, action: PayloadAction<string>) {
-            state.loading = false;
-            state.error = action.payload;
+        fetchSalesFailure(state, action: PayloadAction) {
         },
     },
     extraReducers: (builder) => {
@@ -49,10 +48,24 @@ const salesSlice = createSlice({
                 state.loading = false;
                 state.totalSumOfServices = action.payload.totalService;
                 state.totalSumOfSales = action.payload.totalSales;
-                state.totalSumOfTaxes = action.payload.totalTaxes
+                state.totalSumOfTaxes = action.payload.totalTaxes;
+                state.subTotal = action.payload.subTotal;
 
             })
             .addCase(getTicketsForPeriods.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(getFacturesForPeriods.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getFacturesForPeriods.fulfilled, (state, action) => {
+                state.loading = false;
+                state.salesFiltered = action.payload
+
+            })
+            .addCase(getFacturesForPeriods.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })

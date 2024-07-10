@@ -41,7 +41,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
                 <CssBaseline />
 
-                <SnackbarProvider maxSnack={2}>
+                <SnackbarProvider anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'center',
+                }}
+                  maxSnack={2}>
 
                   <main className="flex ">
 

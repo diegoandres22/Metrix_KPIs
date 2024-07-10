@@ -45,7 +45,7 @@ export default function NavBar() {
               </li>
               <li>
                 <Link
-                  href="/ventas/actual"
+                  href="/ventas/detallado"
                   className={getLinkClasses(Titles.Sales2)}
                 >
                   {Titles.Sales2}

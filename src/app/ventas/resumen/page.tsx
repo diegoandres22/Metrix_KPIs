@@ -38,6 +38,7 @@ export default function Resumen() {
   const totalSumOfSales = useSelector((state: RootState) => state.sales.totalSumOfSales)
   const totalSumOfServices = useSelector((state: RootState) => state.sales.totalSumOfServices)
   const totalSumOfTaxes = useSelector((state: RootState) => state.sales.totalSumOfTaxes)
+  const subTotal = useSelector((state: RootState) => state.sales.subTotal)
 
 
 
@@ -208,8 +209,8 @@ export default function Resumen() {
 
         <div className='flex flex-col items-center justify-center m-auto '>
 
-          <h3>Total en ventas </h3>
-          {totalSumOfSales > 0 && <h2 className='flex gap-2' >{totalSumOfSales}<p> $ </p></h2>}
+          <h3>Sub-total : </h3>
+          {subTotal > 0 && <h2 className='flex gap-2 text-2xl' >{subTotal}<p> $ </p></h2>}
 
           <div className='flex flex-col text-slate-400 items-center justify-center'>
 
@@ -217,6 +218,8 @@ export default function Resumen() {
 
             {totalSumOfServices > 0 && <h3 >Servicios: {totalSumOfServices} </h3>}
             {totalSumOfTaxes > 0 && <h3 >Impuestos: {totalSumOfTaxes} </h3>}
+            {totalSumOfSales > 0 && <h3 >Total ventas: {totalSumOfSales} </h3>}
+
           </div>
         </div>
 

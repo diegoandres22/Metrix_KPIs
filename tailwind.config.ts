@@ -1,7 +1,7 @@
 
 import type { Config } from "tailwindcss";
 
-const {nextui} = require("@nextui-org/react");
+const { nextui } = require("@nextui-org/react");
 
 const config: Config = {
   content: [
@@ -14,11 +14,12 @@ const config: Config = {
     extend: {
       colors: {
         buttomClick: '#00A8FF',
-        backgColor : '#0A0A19'
+        backgColor: '#0A0A19',
+        colorDetailBill: '#707070'
       }
     },
   },
-  darkMode: "class",
+darkMode: "class",
   plugins: [nextui()]
 };
 
