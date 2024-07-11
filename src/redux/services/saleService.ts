@@ -19,6 +19,8 @@ interface ResponseTicketsForPeriods {
 
 }
 
+export const formatNumber = (num: number) => parseFloat(num.toFixed(2));
+
 export const getTicketsForPeriods = createAsyncThunk<ResponseTicketsForPeriods, DateParams, { rejectValue: string }>(
     'tickets/getTickets',
     async ({ dateFrom, dateEnd }, { rejectWithValue }) => {
@@ -60,6 +62,7 @@ export const getTicketsForPeriods = createAsyncThunk<ResponseTicketsForPeriods, 
                     product_code
                 } = ticket;
 
+
                 let existingInvoice = salesArray.find((invoice) => invoice.orden === order_id);
 
                 if (existingInvoice) {
@@ -82,9 +85,9 @@ export const getTicketsForPeriods = createAsyncThunk<ResponseTicketsForPeriods, 
                         orden: order_id,
 
                         sub_total_factura: subtotal,
-                        total_factura: total,
-                        impuesto_factura: tax_value,
-                        neto_factura: net_price,
+                        total_factura: formatNumber(total),
+                        impuesto_factura: formatNumber(tax_value),
+                        neto_factura: formatNumber(net_price),
                         direccion_cliente: customer_address,
                         numero_cliente: customer_phone,
                         nombre_cliente: customer_name,
@@ -101,7 +104,7 @@ export const getTicketsForPeriods = createAsyncThunk<ResponseTicketsForPeriods, 
                             sub_total_producto: product_subtotal,
                             impuesto_producto: product_tax_value,
                         }],
-                        servicio: service_value,
+                        servicio: formatNumber(service_value),
                         porcentaje_impuesto: tax_percentage,
                         estado: status
                     };
@@ -190,11 +193,11 @@ export const getFacturesForPeriods = createAsyncThunk<Factura[], DateParams, { r
                         orden: order_id,
 
                         sub_total_factura: subtotal,
-                        total_factura: total,
-                        impuesto_factura: tax_value,
-                        neto_factura: net_price,
-
-
+                        total_factura: formatNumber(total),
+                        impuesto_factura: formatNumber(tax_value),
+                        neto_factura: formatNumber(net_price),
+                        direccion_cliente: customer_address,
+                        numero_cliente: customer_phone,
                         nombre_cliente: customer_name,
                         cedula_cliente: customer_identification,
                         fecha: bill_datetime_string,
@@ -209,11 +212,8 @@ export const getFacturesForPeriods = createAsyncThunk<Factura[], DateParams, { r
                             sub_total_producto: product_subtotal,
                             impuesto_producto: product_tax_value,
                         }],
-                        servicio: service_value,
+                        servicio: formatNumber(service_value),
                         porcentaje_impuesto: tax_percentage,
-
-                        numero_cliente: customer_phone,
-                        direccion_cliente: customer_address,
                         estado: status
                     };
 
@@ -222,7 +222,7 @@ export const getFacturesForPeriods = createAsyncThunk<Factura[], DateParams, { r
             });
 
             return salesArray;
-            ;
+            
         } catch (error) {
 
             enqueueSnackbar('Error en la petición a la API', { variant: 'error' });

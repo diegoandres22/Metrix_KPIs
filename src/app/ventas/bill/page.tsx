@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useAppDispatch } from '@/redux/services/hooks';
 import { setTitle } from '@/redux/slices/titleSlice';
 import { Titles } from '@/variables';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner, Autocomplete, AutocompleteItem, DatePicker, Button, DateValue, Input, useDisclosure, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Divider } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner, Autocomplete, AutocompleteItem, DatePicker, Button, DateValue, Input, useDisclosure, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Divider, SortDescriptor } from "@nextui-org/react";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { enqueueSnackbar } from 'notistack';
 import { getFacturesForPeriods } from '@/redux/services/saleService';
@@ -13,7 +13,8 @@ import { useSelector } from 'react-redux';
 import { Factura } from '@/types/factureInt';
 import { SearchIcon } from '@chakra-ui/icons';
 import { Product } from '@/types/productInt';
-import Productos from '@/app/products/page';
+import { removeFacturesForPeriods } from '@/redux/slices/saleSlice';
+import { Customers } from '@/types/customerInt';
 
 
 
@@ -45,6 +46,35 @@ export default function Actual() {
 
   const dispatch = useAppDispatch();
 
+
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor | undefined>(undefined);
+
+
+  const handleSortChange = (descriptor: SortDescriptor) => {
+    setSortDescriptor(descriptor);
+  };
+
+  const sortedBills = salesFiltered.slice().sort((a, b) => {
+    if (!sortDescriptor || !sortDescriptor.column) return 0;
+
+    const aValue = a[sortDescriptor.column as keyof Factura];
+    const bValue = b[sortDescriptor.column as keyof Factura];
+
+    if (aValue === undefined || bValue === undefined) return 0;
+
+    if (sortDescriptor.direction === "ascending") {
+      return aValue > bValue ? 1 : -1;
+    } else {
+      return aValue < bValue ? 1 : -1;
+    }
+  });
+
+
+
+
+
+
+
   useEffect(() => {
     dispatch(setTitle(Titles.Sales2))
 
@@ -66,6 +96,10 @@ export default function Actual() {
 
   useEffect(() => {
 
+
+    return () => {
+      dispatch(removeFacturesForPeriods())
+    };
   }, [billValue]);
 
 
@@ -190,39 +224,42 @@ export default function Actual() {
           className=' w-full '
           selectionMode="single"
           classNames={{
-            base: "max-h-[70vh] overflow-scroll",
+            base: "max-h-[70vh] ",
             table: "min-h-[420px]",
           }}
           aria-labelledby="tabla-ventas-label"
+
+          sortDescriptor={sortDescriptor}
+          onSortChange={handleSortChange}
         >
           <TableHeader>
-            <TableColumn key="1" allowsSorting>
+            <TableColumn key="factura" allowsSorting>
               Factura
             </TableColumn>
-            <TableColumn key="2" allowsSorting>
+            <TableColumn key="nombre_cliente" allowsSorting>
               Nombre
             </TableColumn>
-            <TableColumn key="3" allowsSorting>
+            <TableColumn key="cedula_cliente" >
               cedula
             </TableColumn>
-            <TableColumn key="4" allowsSorting>
+            <TableColumn key="total_productos" allowsSorting>
               Total productos
             </TableColumn>
-            <TableColumn key="5" allowsSorting>
+            <TableColumn key="neto_factura" allowsSorting>
               Neto factura
             </TableColumn>
-            <TableColumn key="6" allowsSorting>
+            <TableColumn key="impuesto_factura" allowsSorting>
               Impuesto factura
             </TableColumn>
-            <TableColumn key="7" allowsSorting>
+            <TableColumn key="servicio" allowsSorting>
               Servicio
             </TableColumn>
-            <TableColumn key="8" allowsSorting>
+            <TableColumn key="total_factura" allowsSorting>
               Total factura
             </TableColumn>
           </TableHeader>
           <TableBody
-            items={salesFiltered}
+            items={sortedBills}
             isLoading={salesLoading}
             loadingContent={<Spinner label="Cargando facturas..." />}
 

@@ -37,6 +37,15 @@ const salesSlice = createSlice({
         },
         fetchSalesFailure(state, action: PayloadAction) {
         },
+        removeFacturesForPeriods(state) {
+            state.salesFiltered = [];
+        },
+        removeTotals(state) {
+            state.totalSumOfSales = 0;
+            state.totalSumOfServices = 0;
+            state.totalSumOfTaxes = 0;
+            state.subTotal = 0;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -73,7 +82,7 @@ const salesSlice = createSlice({
     },
 });
 
-export const { fetchSalesStart, fetchSalesSuccess, fetchSalesFailure } = salesSlice.actions;
+export const { fetchSalesStart, fetchSalesSuccess, fetchSalesFailure, removeFacturesForPeriods, removeTotals } = salesSlice.actions;
 
 export const selectSales = (state: RootState) => state.titles.title;
 

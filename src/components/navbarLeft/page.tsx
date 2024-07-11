@@ -29,12 +29,12 @@ export default function NavBar() {
         <AccordionItem className='border-none'>
           <AccordionButton >
             <Box as='span' flex='1' textAlign='left' >
-              Ventas
+              {Titles.salesTitle}
             </Box>
             <AccordionIcon />
           </AccordionButton>
           <AccordionPanel >
-            <ul className='flex flex-col gap-4 mt-4 ml-2' >
+            <ul className='flex flex-col gap-4 mt-4 ml-4' >
               <li  >
                 <Link
                   href="/ventas/resumen"
@@ -45,7 +45,7 @@ export default function NavBar() {
               </li>
               <li>
                 <Link
-                  href="/ventas/detallado"
+                  href="/ventas/bill"
                   className={getLinkClasses(Titles.Sales2)}
                 >
                   {Titles.Sales2}
@@ -64,32 +64,56 @@ export default function NavBar() {
         </AccordionItem>
       </Accordion>
 
-      <Link
-        href="/purchases"
-        className={getLinkClasses(Titles.Third)}
-      >
-        {Titles.Third}
-      </Link>
+      <Accordion allowMultiple >
+        <AccordionItem className='border-none'>
+          <AccordionButton >
+            <Box as='span' flex='1' textAlign='left' >
+              {Titles.Third}
+            </Box>
+            <AccordionIcon />
+          </AccordionButton>
+          <AccordionPanel >
+            <ul className='flex flex-col gap-4 mt-4 ml-4' >
+              <li  >
+                <Link
+                  href="/purchases"
+                  className={getLinkClasses(Titles.Third)}
+                >
+                  {Titles.Third}
+                </Link>
+              </li>
+            </ul>
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
 
-      <Link
-        href="/metrics"
-        className={getLinkClasses(Titles.Fourth)}
-      >
-        {Titles.Fourth}
-      </Link>
+      <Accordion allowMultiple >
+        <AccordionItem className='border-none'>
+          <AccordionButton >
+            <Box as='span' flex='1' textAlign='left' >
+              {Titles.clientsTitle}
+            </Box>
+            <AccordionIcon />
+          </AccordionButton>
+          <AccordionPanel >
+            <ul className='flex flex-col gap-4 mt-4 ml-4' >
+              <li  >
+                <Link href="/customers/details" className={getLinkClasses(Titles.clients1)}                >
+                  {Titles.clients1}
+                </Link>
+              </li>
+
+
+            </ul>
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
 
       <Link
         href="/products"
         className={getLinkClasses(Titles.Fifth)}
       >
         {Titles.Fifth}
-      </Link>
-
-      <Link
-        href="/customers"
-        className={getLinkClasses(Titles.Sixth)}
-      >
-        {Titles.Sixth}
       </Link>
 
       <Link

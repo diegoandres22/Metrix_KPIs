@@ -2,12 +2,14 @@
 // Etiquetas de panel de control lateral
 export const Titles = {
     First: "Inicio",
+    salesTitle:"Ventas",
     Sales1: "Consolidado de ventas",
     Sales2: "Detallado por facturas",
     Sales3: "Detallado por metodos de pago",
 
     Third: "Compras",
-    Fourth: "Metricas",
+    clientsTitle:"Clientes",
+    clients1: "Detalle de clientes",
     Fifth: "Productos",
     Sixth: "Clientes",
     Seventh: "Promociones",

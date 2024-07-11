@@ -12,6 +12,7 @@ import { Autocomplete, AutocompleteItem, Button, DatePicker, DateValue } from '@
 
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { enqueueSnackbar } from 'notistack';
+import { removeTotals } from '@/redux/slices/saleSlice';
 
 interface InputValue {
   type: string;
@@ -128,6 +129,9 @@ export default function Resumen() {
 
   useEffect(() => {
 
+    return () => {
+      dispatch(removeTotals())
+    };
   }, [inputValue]);
 
 
@@ -210,15 +214,15 @@ export default function Resumen() {
         <div className='flex flex-col items-center justify-center m-auto '>
 
           <h3>Sub-total : </h3>
-          {subTotal > 0 && <h2 className='flex gap-2 text-2xl' >{subTotal}<p> $ </p></h2>}
+          {!salesLoading && subTotal > 0 && <h2 className='flex gap-2 text-2xl' >{subTotal}<p> $ </p></h2>}
 
           <div className='flex flex-col text-slate-400 items-center justify-center'>
 
-            {inputDate.from.length > 0 && inputDate.to.length > 0 && <h3>{inputDate.from} - {inputDate.to}</h3>}
+            {!salesLoading && inputDate.from.length > 0 && inputDate.to.length > 0 && <h3>{inputDate.from} - {inputDate.to}</h3>}
 
-            {totalSumOfServices > 0 && <h3 >Servicios: {totalSumOfServices} </h3>}
-            {totalSumOfTaxes > 0 && <h3 >Impuestos: {totalSumOfTaxes} </h3>}
-            {totalSumOfSales > 0 && <h3 >Total ventas: {totalSumOfSales} </h3>}
+            {!salesLoading && totalSumOfServices > 0 && <h3 >Servicios: {totalSumOfServices} </h3>}
+            {!salesLoading && totalSumOfTaxes > 0 && <h3 >Impuestos: {totalSumOfTaxes} </h3>}
+            {!salesLoading && totalSumOfSales > 0 && <h3 >Total ventas: {totalSumOfSales} </h3>}
 
           </div>
         </div>
