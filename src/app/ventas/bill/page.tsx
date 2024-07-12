@@ -395,7 +395,7 @@ export default function Actual() {
                       <TableColumn>Impuesto</TableColumn>
                       <TableColumn>Total</TableColumn>
                     </TableHeader>
-                    <TableBody items={billValue?.total_productos}>
+                    <TableBody emptyContent={"No facturas ..."} items={billValue?.total_productos} >
                       {(item: Product) => (
 
                         <TableRow key={item.codigo}
@@ -410,7 +410,6 @@ export default function Actual() {
                           <TableCell>{item.total_producto} </TableCell>
                         </TableRow>
                       )}
-
                     </TableBody>
                   </Table>
                 </ModalBody>

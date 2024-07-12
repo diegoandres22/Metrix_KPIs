@@ -6,5 +6,8 @@ export interface Consumos {
     estado: string,
     precio: number,
     tasa: number,
-    producto_id: number
+    producto_id: number,
+    sub_total: number,
+    impuesto: number,
+    total:number,
 }

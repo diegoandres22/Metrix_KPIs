@@ -5,7 +5,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner, Input, Autocomplete, AutocompleteItem, DatePicker, Button, DateValue, useDisclosure, Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/react';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner, Input, Autocomplete, AutocompleteItem, DatePicker, Button, DateValue, useDisclosure, Modal, ModalContent, ModalHeader, ModalBody, Divider } from '@nextui-org/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { getCustomersForPeriods } from '@/redux/services/customerService';
 import { enqueueSnackbar } from 'notistack';
@@ -15,6 +15,8 @@ import { Customers } from '@/types/customerInt';
 import { Consumos } from '@/types/consumosInt';
 import { useAppDispatch } from '@/redux/services/hooks';
 import { SortDescriptor } from "@nextui-org/react";
+import { setTitle } from '@/redux/slices/titleSlice';
+import { Titles } from '@/variables';
 
 interface InputValue {
     type: string;
@@ -49,6 +51,8 @@ export default function Actual() {
     };
 
     useEffect(() => {
+        dispatch(setTitle(Titles.customers1))
+
         const { year, day, month } = today(getLocalTimeZone());
 
         let YEAR = year.toString().padStart(4, '0');
@@ -275,6 +279,31 @@ export default function Actual() {
                                     </div>
 
                                     <div className='flex gap-1'>
+                                        <p className='text-colorDetailBill'>c:</p>
+                                        <b>-------- $</b>
+                                    </div>
+
+                                </div>
+
+                                <Divider className="my-1"  />
+
+                                <div className='w-full h-full flex gap-4 justify-between'>
+                                    <div className='flex gap-1'>
+                                        <p className='text-colorDetailBill'>Total servicio :</p>
+                                        <b>{billValue?.servicio}</b>
+                                    </div>
+
+                                    <div className='flex gap-1'>
+                                        <p className='text-colorDetailBill'>a:</p>
+                                        <b>----</b>
+                                    </div>
+
+                                    <div className='flex gap-1'>
+                                        <p className='text-colorDetailBill'>b:</p>
+                                        <b>-----</b>
+                                    </div>
+
+                                    <div className='flex gap-1'>
                                         <p className='text-colorDetailBill'>Total consumo:</p>
                                         <b>{billValue?.consumo_total_USD} $</b>
                                     </div>
@@ -288,6 +317,10 @@ export default function Actual() {
                                         <TableColumn>Número de orden</TableColumn>
                                         <TableColumn>Estado</TableColumn>
                                         <TableColumn>Precio </TableColumn>
+                                        <TableColumn>Sub total </TableColumn>
+                                        <TableColumn>Impuesto </TableColumn>
+                                        <TableColumn>Total </TableColumn>
+
                                     </TableHeader>
                                     <TableBody items={billValue?.consumos}>
                                         {(item: Consumos) => (
@@ -298,6 +331,10 @@ export default function Actual() {
                                                 <TableCell>{item.numero_orden}</TableCell>
                                                 <TableCell>{item.estado}</TableCell>
                                                 <TableCell>{item.precio}</TableCell>
+                                                <TableCell>{item.sub_total}</TableCell>
+                                                <TableCell>{item.impuesto}</TableCell>
+                                                <TableCell>{item.total}</TableCell>
+
                                             </TableRow>
                                         )}
                                     </TableBody>

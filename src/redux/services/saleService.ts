@@ -18,6 +18,11 @@ interface ResponseTicketsForPeriods {
     subTotal: number
 
 }
+interface AllTickets {
+    month: string,
+    total: number
+}
+
 
 export const formatNumber = (num: number) => parseFloat(num.toFixed(2));
 
@@ -35,6 +40,9 @@ export const getTicketsForPeriods = createAsyncThunk<ResponseTicketsForPeriods, 
             arrTickets.forEach((ticket: any) => {
                 if (ticket.status === 'Cancelada') {
                     return;
+                }
+                if (ticket.status !== 'Cancelada' && ticket.status !== 'Cerrada') {
+                    console.log("extraordinario: ", ticket);
                 }
                 const {
                     bill_id,
@@ -222,11 +230,72 @@ export const getFacturesForPeriods = createAsyncThunk<Factura[], DateParams, { r
             });
 
             return salesArray;
-            
+
         } catch (error) {
 
             enqueueSnackbar('Error en la petición a la API', { variant: 'error' });
             return rejectWithValue('No se pudieron obtener las facturas.');
+        }
+    }
+);
+
+
+
+export const getAllTickets = createAsyncThunk<AllTickets[], DateParams, { rejectValue: string }>(
+    'tickets/getAllTickets',
+    async ({ dateFrom, dateEnd }, { rejectWithValue }) => {
+        try {
+
+            const response = await axios.get(endpoints.salesFull(dateFrom, dateEnd));
+
+            const arrTickets = response.data;
+
+            arrTickets.forEach((ticket: any) => {
+                if (ticket.status === 'Cancelada') {
+                    return;
+                }
+
+                const {
+                    bill_id,
+                    order_id,
+                    subtotal,
+                    total,
+                    customer_name,
+                    customer_identification,
+                    bill_datetime_string,
+                    product_name,
+                    quantity,
+                    family_name,
+                    product_type_name,
+                    service_value,
+                    tax_percentage,
+                    tax_value,
+                    product_total,
+                    product_net_price,
+                    product_subtotal,
+                    product_tax_value,
+                    net_price,
+                    customer_address,
+                    customer_phone,
+                    status,
+                    product_code
+                } = ticket;
+
+
+
+
+            });
+
+
+            return [{
+                month: 'null',
+                total: 1
+            }]
+        } catch (error) {
+            console.log(error);
+
+            enqueueSnackbar('Error en la petición a la API', { variant: 'error' });
+            return rejectWithValue('No se pudieron obtener los tickets.');
         }
     }
 );

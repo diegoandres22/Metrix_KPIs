@@ -13,7 +13,6 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        buttomClick: '#00A8FF',
         backgColor: '#0A0A19',
         colorDetailBill: '#707070'
       }

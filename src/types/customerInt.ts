@@ -11,5 +11,5 @@ export interface Customers {
     consumos: Consumos[],
     consumo_total_USD: number,
     consumo_total_BS: number,
-    
+    servicio: number,
 }

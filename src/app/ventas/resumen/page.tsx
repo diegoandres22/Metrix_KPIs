@@ -1,14 +1,14 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from 'recharts';
 import { setTitle } from '@/redux/slices/titleSlice';
 import { Titles } from '@/variables';
 import { useAppDispatch } from '@/redux/services/hooks';
 import { getTicketsForPeriods } from '@/redux/services/saleService';
 import { RootState } from '@/redux/store';
 import { useSelector } from 'react-redux';
-import { Autocomplete, AutocompleteItem, Button, DatePicker, DateValue } from '@nextui-org/react';
+import { Autocomplete, AutocompleteItem, Button, DatePicker, DateValue, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip as ChakraTooltip, Card, CardBody, Tab, Tabs } from '@nextui-org/react';
 
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { enqueueSnackbar } from 'notistack';
@@ -26,13 +26,7 @@ export default function Resumen() {
   const dispatch = useAppDispatch();
 
   const data = [
-    { "name": "Enero", "Ventas": 4000, "Gastos": 2400 },
-    { "name": "Febrero", "Ventas": 3000, "Gastos": 1398 },
-    { "name": "Marzo", "Ventas": 2000, "Gastos": 5800 },
-    { "name": "Abril", "Ventas": 2780, "Gastos": 3908 },
-    { "name": "Mayo", "Ventas": 1890, "Gastos": 4800 },
-    { "name": "Junio", "Ventas": 2390, "Gastos": 3800 },
-    { "name": "Julio", "Ventas": 3490, "Gastos": 4300 }
+    { "name": "Enero", "Ventas": 0 }
   ]
 
   const salesLoading = useSelector((state: RootState) => state.sales.loading)
@@ -191,43 +185,74 @@ export default function Resumen() {
           />
         </div>
 
-        <Button className="bg-green-400 text-black" variant="shadow"
-          onClick={handleCalculate}
-          isLoading={salesLoading}
-          isDisabled={!inputValue.from || !inputValue.to} >
-          {!salesLoading && 'Calcular'}
-        </Button>
+        <ChakraTooltip content="Traer las ventas">
+
+          <Button className="bg-green-400 text-black" variant="shadow"
+            onClick={handleCalculate}
+            isLoading={salesLoading}
+            isDisabled={!inputValue.from || !inputValue.to} >
+            {!salesLoading && 'Calcular'}
+          </Button>
+        </ChakraTooltip>
+
+      </div>
+      <div className="flex w-[70vw] m-auto p-5  ">
+        <Table removeWrapper aria-label="Example static collection table">
+          <TableHeader>
+            <TableColumn>Venta neta</TableColumn>
+            <TableColumn>Servicios</TableColumn>
+            <TableColumn>Impuestos</TableColumn>
+            <TableColumn>TOTAL</TableColumn>
+            <TableColumn>Moneda</TableColumn>
+          </TableHeader>
+          <TableBody>
+            <TableRow key="1">
+              <TableCell>{!salesLoading && subTotal > 0 && <h2 className='flex gap-2 text-2xl' >{subTotal}<p>  </p></h2>}</TableCell>
+              <TableCell>{!salesLoading && totalSumOfServices > 0 && <h3 > {totalSumOfServices} </h3>}</TableCell>
+              <TableCell>{!salesLoading && totalSumOfTaxes > 0 && <h3 > {totalSumOfTaxes} </h3>}</TableCell>
+              <TableCell>{!salesLoading && totalSumOfSales > 0 && <h3 >{totalSumOfSales}</h3>}</TableCell>
+              <TableCell> {!salesLoading && totalSumOfSales > 0 && '$'} </TableCell>
+
+            </TableRow>
+
+          </TableBody>
+        </Table>
 
       </div>
 
-      <div className="flex w-[80vw] h-10% p-5  ">
-        <BarChart width={730} height={250} data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="Ventas" fill="#45D483" />
-          <Bar dataKey="Gastos" fill="#C71585" />
-        </BarChart>
+      <div className="flex w-[80vw]  ">
+        <div className="w-full lg:w-[80%]">
+          <BarChart width={800} height={250} data={data} className="absolute top-0 left-0 w-full h-full">
+            <CartesianGrid strokeDasharray="6 6" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="Ventas" fill="#45D483" />
+          </BarChart>
+        </div>
+        <div className="w-[20%] flex flex-col gap-4 pr-6" >
+          {/* <Button color="success" variant="light">
+            Año
+          </Button>
+          <Button color="success" variant="light">
+            Mes
+          </Button> */}
+          <Tabs aria-label="Options" placement='start' size='lg'>
+            <Tab key="Año" title="Año">
 
-        <div className='flex flex-col items-center justify-center m-auto '>
+            </Tab>
+            <Tab key="Mes" title="Mes">
 
-          <h3>Sub-total : </h3>
-          {!salesLoading && subTotal > 0 && <h2 className='flex gap-2 text-2xl' >{subTotal}<p> $ </p></h2>}
+            </Tab>
+            <Tab key="Semana" title="Semana">
 
-          <div className='flex flex-col text-slate-400 items-center justify-center'>
-
-            {!salesLoading && inputDate.from.length > 0 && inputDate.to.length > 0 && <h3>{inputDate.from} - {inputDate.to}</h3>}
-
-            {!salesLoading && totalSumOfServices > 0 && <h3 >Servicios: {totalSumOfServices} </h3>}
-            {!salesLoading && totalSumOfTaxes > 0 && <h3 >Impuestos: {totalSumOfTaxes} </h3>}
-            {!salesLoading && totalSumOfSales > 0 && <h3 >Total ventas: {totalSumOfSales} </h3>}
-
-          </div>
+            </Tab>
+          </Tabs>
         </div>
 
       </div>
     </div >
   )
 }
+
+

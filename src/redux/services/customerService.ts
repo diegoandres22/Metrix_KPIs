@@ -21,6 +21,8 @@ export const getCustomersForPeriods = createAsyncThunk<Customers[], DateParams, 
 
             const arrTickets = response.data;
 
+            console.log("mandé :  ", arrTickets);
+
             const customersArray: Customers[] = [];
 
             arrTickets.forEach((ticket: Ticket2) => {
@@ -38,7 +40,12 @@ export const getCustomersForPeriods = createAsyncThunk<Customers[], DateParams, 
                     customer_id,
                     exchange_date_day,
                     product_total,
-                    product_code
+                    product_code,
+                    product_sale_price,
+                    product_subtotal,
+                    product_tax_value,
+                    service_value,
+                    total
                 } = ticket;
 
 
@@ -52,7 +59,7 @@ export const getCustomersForPeriods = createAsyncThunk<Customers[], DateParams, 
                         existingInvoice.total_visitas += 1;
                     }
                     if (status !== "Cancelada") {
-                        existingInvoice.consumo_total_USD = formatNumber(existingInvoice.consumo_total_USD + product_total * quantity);
+                        existingInvoice.consumo_total_USD = formatNumber(existingInvoice.consumo_total_USD + total);
                     }
 
                     existingInvoice.consumos.push({
@@ -61,9 +68,12 @@ export const getCustomersForPeriods = createAsyncThunk<Customers[], DateParams, 
                         cantidad: quantity,
                         numero_orden: order_id,
                         estado: status,
-                        precio: formatNumber(product_total),
+                        precio: formatNumber(product_sale_price),
                         tasa: exchange_date_day,
-                        producto_id: product_code
+                        producto_id: product_code,
+                        sub_total: formatNumber(product_subtotal),
+                        impuesto: formatNumber(product_tax_value),
+                        total: formatNumber(product_total)
                     });
 
                 } else {
@@ -80,19 +90,24 @@ export const getCustomersForPeriods = createAsyncThunk<Customers[], DateParams, 
                             cantidad: quantity,
                             numero_orden: order_id,
                             estado: status,
-                            precio: formatNumber(product_total),
+                            precio: formatNumber(product_sale_price),
                             tasa: exchange_date_day,
-                            producto_id: product_code
+                            producto_id: product_code,
+                            sub_total: formatNumber(product_subtotal),
+                            impuesto: formatNumber(product_tax_value),
+                            total: formatNumber(product_total)
                         }],
                         consumo_total_USD: formatNumber(product_total),
-                        consumo_total_BS: 0
+                        consumo_total_BS: 0,
+                        servicio: service_value,
                     };
 
                     customersArray.push(newInvoice);
                 }
 
             });
-            // console.log("mandé :  ", customersArray);
+
+
 
             return customersArray;
 
