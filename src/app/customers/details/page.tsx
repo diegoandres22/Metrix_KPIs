@@ -10,13 +10,15 @@ import { SearchIcon } from '@chakra-ui/icons';
 import { getCustomersForPeriods } from '@/redux/services/customerService';
 import { enqueueSnackbar } from 'notistack';
 import { getLocalTimeZone, today } from '@internationalized/date';
-import { removeFacturesForPeriods } from '@/redux/slices/saleSlice';
 import { Customers } from '@/types/customerInt';
 import { Consumos } from '@/types/consumosInt';
 import { useAppDispatch } from '@/redux/services/hooks';
 import { SortDescriptor } from "@nextui-org/react";
 import { setTitle } from '@/redux/slices/titleSlice';
 import { Titles } from '@/variables';
+import { filterCustomers, removeCustomersForPeriods } from '@/redux/slices/customerSlice';
+
+
 
 interface InputValue {
     type: string;
@@ -66,13 +68,14 @@ export default function Actual() {
         };
 
         setInputValue(newInputValue);
+        return () => {
+            dispatch(removeCustomersForPeriods());
+        };
     }, []);
 
     useEffect(() => {
-        return () => {
-            dispatch(removeFacturesForPeriods());
-        };
-    }, []);
+        
+    }, [totalCustomers]);
 
     const handleInputChange = (value: DateValue, field: keyof InputValue) => {
         let year = value.year.toString().padStart(4, '0');
@@ -118,6 +121,10 @@ export default function Actual() {
         }
     });
 
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch(filterCustomers(event.target.value));
+    };
+
     return (
         <div className='mt-[4em] overflow-hidden'>
             <div className='flex w-[80vw] h-10% p-5 justify-center items-center gap-10 '>
@@ -127,7 +134,9 @@ export default function Actual() {
                         className='w-full'
                         placeholder='Buscar'
                         startContent={<SearchIcon />}
-                        onClear={() => { }}
+
+                        onChange={handleSearchChange}
+                        onClear={() => dispatch(filterCustomers(''))}
                     />
                 </div>
 
@@ -217,20 +226,21 @@ export default function Actual() {
                         items={sortedCustomers}
                         isLoading={loading}
                         loadingContent={<Spinner label='Cargando clientes...' />}
+                        emptyContent={"No hay clientes"}
                     >
                         {(item: Customers) => (
                             <TableRow
-                                key={item.id}
+                                key={item.cliente_id}
                                 onClick={() => {
                                     handleOpen(item);
                                     setBillValue(item);
                                 }}
                                 aria-label='Ver cliente'
                             >
-                                <TableCell>{item.id}</TableCell>
+                                <TableCell>{item.cliente_id}</TableCell>
                                 <TableCell>{item.nombre}</TableCell>
                                 <TableCell>{item.total_visitas}</TableCell>
-                                <TableCell>{item.consumo_total_USD} $</TableCell>
+                                <TableCell>$ {item.consumo_total_USD}</TableCell>
                                 <TableCell>{item.numero_de_telefono}</TableCell>
                                 <TableCell>{item.direccion}</TableCell>
                             </TableRow>
@@ -245,8 +255,8 @@ export default function Actual() {
                         <>
                             <ModalHeader className='flex justify-around '>
                                 <div className='flex gap-1'>
-                                    <p className='text-colorDetailBill'>ID:</p>
-                                    <b>{billValue?.id}</b>
+                                    <p className='text-colorDetailBill'>ID cliente:</p>
+                                    <b>{billValue?.cliente_id}</b>
                                 </div>
 
                                 <div className='flex gap-1'>
@@ -285,7 +295,7 @@ export default function Actual() {
 
                                 </div>
 
-                                <Divider className="my-1"  />
+                                <Divider className="my-1" />
 
                                 <div className='w-full h-full flex gap-4 justify-between'>
                                     <div className='flex gap-1'>
@@ -333,7 +343,7 @@ export default function Actual() {
                                                 <TableCell>{item.precio}</TableCell>
                                                 <TableCell>{item.sub_total}</TableCell>
                                                 <TableCell>{item.impuesto}</TableCell>
-                                                <TableCell>{item.total}</TableCell>
+                                                <TableCell>{item.total_producto}</TableCell>
 
                                             </TableRow>
                                         )}

@@ -2,7 +2,7 @@ import { Consumos } from "./consumosInt"
 
 
 export interface Customers {
-    id: number,
+    cliente_id: number,
     nombre: string,
     numero_de_telefono: string,
     numero_de_cedula: number,

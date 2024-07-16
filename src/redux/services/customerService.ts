@@ -21,8 +21,6 @@ export const getCustomersForPeriods = createAsyncThunk<Customers[], DateParams, 
 
             const arrTickets = response.data;
 
-            console.log("mandé :  ", arrTickets);
-
             const customersArray: Customers[] = [];
 
             arrTickets.forEach((ticket: Ticket2) => {
@@ -58,8 +56,11 @@ export const getCustomersForPeriods = createAsyncThunk<Customers[], DateParams, 
                     if (!isOrderExists) {
                         existingInvoice.total_visitas += 1;
                     }
-                    if (status !== "Cancelada") {
-                        existingInvoice.consumo_total_USD = formatNumber(existingInvoice.consumo_total_USD + total);
+                    const isOrderDuplicate = existingInvoice.consumos.some(consumo => consumo.numero_orden === order_id);
+
+                    if (status !== "Cancelada" && !isOrderDuplicate) {
+
+                        existingInvoice.consumo_total_USD += formatNumber(total);
                     }
 
                     existingInvoice.consumos.push({
@@ -73,12 +74,12 @@ export const getCustomersForPeriods = createAsyncThunk<Customers[], DateParams, 
                         producto_id: product_code,
                         sub_total: formatNumber(product_subtotal),
                         impuesto: formatNumber(product_tax_value),
-                        total: formatNumber(product_total)
+                        total_producto: formatNumber(product_total)
                     });
 
                 } else {
                     const newInvoice: Customers = {
-                        id: customer_id,
+                        cliente_id: customer_id,
                         nombre: customer_name,
                         numero_de_telefono: customer_phone,
                         numero_de_cedula: customer_identification,
@@ -95,9 +96,9 @@ export const getCustomersForPeriods = createAsyncThunk<Customers[], DateParams, 
                             producto_id: product_code,
                             sub_total: formatNumber(product_subtotal),
                             impuesto: formatNumber(product_tax_value),
-                            total: formatNumber(product_total)
+                            total_producto: formatNumber(product_total)
                         }],
-                        consumo_total_USD: formatNumber(product_total),
+                        consumo_total_USD: formatNumber(total),
                         consumo_total_BS: 0,
                         servicio: service_value,
                     };

@@ -42,7 +42,6 @@ export const getTicketsForPeriods = createAsyncThunk<ResponseTicketsForPeriods, 
                     return;
                 }
                 if (ticket.status !== 'Cancelada' && ticket.status !== 'Cerrada') {
-                    console.log("extraordinario: ", ticket);
                 }
                 const {
                     bill_id,

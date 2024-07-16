@@ -203,15 +203,13 @@ export default function Resumen() {
             <TableColumn>Servicios</TableColumn>
             <TableColumn>Impuestos</TableColumn>
             <TableColumn>TOTAL</TableColumn>
-            <TableColumn>Moneda</TableColumn>
           </TableHeader>
           <TableBody>
             <TableRow key="1">
-              <TableCell>{!salesLoading && subTotal > 0 && <h2 className='flex gap-2 text-2xl' >{subTotal}<p>  </p></h2>}</TableCell>
-              <TableCell>{!salesLoading && totalSumOfServices > 0 && <h3 > {totalSumOfServices} </h3>}</TableCell>
-              <TableCell>{!salesLoading && totalSumOfTaxes > 0 && <h3 > {totalSumOfTaxes} </h3>}</TableCell>
-              <TableCell>{!salesLoading && totalSumOfSales > 0 && <h3 >{totalSumOfSales}</h3>}</TableCell>
-              <TableCell> {!salesLoading && totalSumOfSales > 0 && '$'} </TableCell>
+              <TableCell>{!salesLoading && subTotal > 0 && <h2  >$ {subTotal}<p>  </p></h2>}</TableCell>
+              <TableCell>{!salesLoading && totalSumOfServices > 0 && <h3 >$ {totalSumOfServices} </h3>}</TableCell>
+              <TableCell>{!salesLoading && totalSumOfTaxes > 0 && <h3 >$ {totalSumOfTaxes} </h3>}</TableCell>
+              <TableCell>{!salesLoading && totalSumOfSales > 0 && <h3 className=' text-2xl'>$ {totalSumOfSales}</h3>}</TableCell>
 
             </TableRow>
 
@@ -231,12 +229,7 @@ export default function Resumen() {
           </BarChart>
         </div>
         <div className="w-[20%] flex flex-col gap-4 pr-6" >
-          {/* <Button color="success" variant="light">
-            Año
-          </Button>
-          <Button color="success" variant="light">
-            Mes
-          </Button> */}
+          
           <Tabs aria-label="Options" placement='start' size='lg'>
             <Tab key="Año" title="Año">
 

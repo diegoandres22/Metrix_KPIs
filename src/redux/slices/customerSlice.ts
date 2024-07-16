@@ -33,6 +33,14 @@ const customerSlice = createSlice({
         removeCustomersForPeriods(state) {
             state.customersFiltered = [];
             state.allCustomers = [];
+        },
+        filterCustomers(state, action: PayloadAction<string>) {
+            const searchTerm = action.payload.toLowerCase();
+            state.customersFiltered = state.allCustomers.filter(customer =>
+                customer.nombre.toLowerCase().includes(searchTerm) ||
+                customer.cliente_id.toString().includes(searchTerm) ||
+                customer.numero_de_telefono.includes(searchTerm)
+            );
         }
     },
     extraReducers: (builder) => {
@@ -55,7 +63,9 @@ const customerSlice = createSlice({
     },
 });
 
+export const { filterCustomers, removeCustomersForPeriods } = customerSlice.actions;
 
-export const selectSales = (state: RootState) => state.titles.title;
+
+export const selectSales = (state: RootState) => state.customers.customersFiltered;
 
 export default customerSlice.reducer;

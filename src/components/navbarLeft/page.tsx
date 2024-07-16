@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Titles } from '../../variables';
 import Link from 'next/link';
 import { Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Box } from '@chakra-ui/react';
@@ -10,7 +10,15 @@ import { useSelector } from 'react-redux';
 export default function NavBar() {
 
   const title = useSelector((state: RootState) => state.titles);
-  const getLinkClasses = (currentTitle: string) => title.title == currentTitle ? 'bg-white rounded-md flex justify-center bg-opacity-20 px-6' : 'flex justify-center ';
+  
+  useEffect(() => {
+
+
+
+  }, [title]);
+
+
+  const getLinkClasses = (currentTitle: string) => title.title == currentTitle ? 'bg-white rounded-md flex justify-center bg-opacity-10 px-6' : 'flex justify-center ';
 
 
   return (
@@ -31,10 +39,10 @@ export default function NavBar() {
           </AccordionButton>
           <AccordionPanel >
             <ul className='flex flex-col gap-4 mt-4' >
-              <li  className='flex justify-center'>
+              <li className='flex justify-center'>
                 <Link
                   href="/ventas/resumen"
-                  className={getLinkClasses(Titles.Sales1) }
+                  className={getLinkClasses(Titles.Sales1)}
                 >
                   {Titles.Sales1}
                 </Link>
@@ -73,7 +81,7 @@ export default function NavBar() {
               <li  >
                 <Link
                   href="/purchases"
-                  
+                  className={getLinkClasses(Titles.BuyDetail)}
                 >
                   {Titles.BuyDetail}
                 </Link>

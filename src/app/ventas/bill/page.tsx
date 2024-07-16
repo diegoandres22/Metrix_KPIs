@@ -13,8 +13,7 @@ import { useSelector } from 'react-redux';
 import { Factura } from '@/types/factureInt';
 import { SearchIcon } from '@chakra-ui/icons';
 import { Product } from '@/types/productInt';
-import { removeFacturesForPeriods } from '@/redux/slices/saleSlice';
-import { Customers } from '@/types/customerInt';
+import { filterBills, removeFacturesForPeriods } from '@/redux/slices/saleSlice';
 
 
 
@@ -92,15 +91,16 @@ export default function Actual() {
     };
 
     setInputValue(newInputValue)
+    return () => {
+      dispatch(removeFacturesForPeriods())
+    };
   }, []);
 
   useEffect(() => {
 
 
-    return () => {
-      dispatch(removeFacturesForPeriods())
-    };
-  }, [billValue]);
+
+  }, [billValue, salesFiltered]);
 
 
 
@@ -144,6 +144,10 @@ export default function Actual() {
     onOpen();
   }
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(filterBills(event.target.value));
+  };
+
   return (
     <div className='mt-[4em] overflow-hidden'>
       <div className="flex w-[80vw] h-10% p-5 justify-center items-center gap-10 ">
@@ -155,7 +159,9 @@ export default function Actual() {
             className="w-full"
             placeholder="Buscar"
             startContent={<SearchIcon />}
-            onClear={() => onClear()}
+
+            onChange={handleSearchChange}
+            onClear={() => dispatch(filterBills(''))}
           />
         </div>
 
@@ -210,7 +216,7 @@ export default function Actual() {
           onClick={handleCalculate}
           isLoading={salesLoading}
           isDisabled={!inputValue.from || !inputValue.to} >
-          {!salesLoading && 'Calcular'}
+          {!salesLoading && 'Buscar'}
         </Button>
 
       </div>
@@ -261,6 +267,8 @@ export default function Actual() {
           <TableBody
             items={sortedBills}
             isLoading={salesLoading}
+
+            emptyContent={"No hay facturas"}
             loadingContent={<Spinner label="Cargando facturas..." />}
 
           >
@@ -395,7 +403,8 @@ export default function Actual() {
                       <TableColumn>Impuesto</TableColumn>
                       <TableColumn>Total</TableColumn>
                     </TableHeader>
-                    <TableBody emptyContent={"No facturas ..."} items={billValue?.total_productos} >
+                    <TableBody
+                      items={billValue?.total_productos} >
                       {(item: Product) => (
 
                         <TableRow key={item.codigo}

@@ -7,7 +7,8 @@ import { Factura } from '@/types/factureInt';
 
 
 interface SalesState {
-    salesFiltered: Factura[];
+    salesFiltered: Factura[],
+    allSales: Factura[],
     loading: boolean;
     error: string | null | undefined | unknown;
     totalSumOfSales: number;
@@ -18,6 +19,7 @@ interface SalesState {
 
 const initialState: SalesState = {
     salesFiltered: [],
+    allSales: [],
     loading: false,
     error: null,
     totalSumOfSales: 0,
@@ -39,12 +41,22 @@ const salesSlice = createSlice({
         },
         removeFacturesForPeriods(state) {
             state.salesFiltered = [];
+            state.allSales = [];
         },
         removeTotals(state) {
             state.totalSumOfSales = 0;
             state.totalSumOfServices = 0;
             state.totalSumOfTaxes = 0;
             state.subTotal = 0;
+        },
+        filterBills(state, action: PayloadAction<string>) {
+
+            const searchTerm = action.payload.toLowerCase();
+            state.salesFiltered = state.allSales.filter(bill =>
+                bill.nombre_cliente.toLowerCase().includes(searchTerm) ||
+                bill.cedula_cliente.toLowerCase().includes(searchTerm)
+
+            );
         }
     },
     extraReducers: (builder) => {
@@ -72,6 +84,7 @@ const salesSlice = createSlice({
             .addCase(getFacturesForPeriods.fulfilled, (state, action) => {
                 state.loading = false;
                 state.salesFiltered = action.payload
+                state.allSales = action.payload
 
             })
             .addCase(getFacturesForPeriods.rejected, (state, action) => {
@@ -82,8 +95,8 @@ const salesSlice = createSlice({
     },
 });
 
-export const { fetchSalesStart, fetchSalesSuccess, fetchSalesFailure, removeFacturesForPeriods, removeTotals } = salesSlice.actions;
+export const { fetchSalesStart, fetchSalesSuccess, fetchSalesFailure, removeFacturesForPeriods, removeTotals, filterBills } = salesSlice.actions;
 
-export const selectSales = (state: RootState) => state.titles.title;
+export const selectSales = (state: RootState) => state.sales.salesFiltered;
 
 export default salesSlice.reducer;

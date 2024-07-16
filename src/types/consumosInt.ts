@@ -9,5 +9,5 @@ export interface Consumos {
     producto_id: number,
     sub_total: number,
     impuesto: number,
-    total:number,
+    total_producto:number,
 }
