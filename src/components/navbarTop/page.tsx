@@ -5,6 +5,7 @@ import React from 'react'
 import { FaUserCircle } from "react-icons/fa";
 import { useSelector } from 'react-redux';
 import { RootState } from "@/redux/store";
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 
 
 
@@ -24,24 +25,23 @@ export default function navbarTop() {
                 <p className=''>Metrix KPIs</p>
                 <p className=''>{title.title}</p>
 
-                <Menu >
-                    <MenuButton>
-                        <FaUserCircle className="text-4xl"></FaUserCircle>
-                    </MenuButton>
-                    <MenuList bg={bgColor} color={textColor}
-                        border="none">
-                        <MenuItem _hover={{ bg: menuHoverBg }} bg={bgColor}>
-                            Perfil
-                        </MenuItem>
-                        <MenuItem _hover={{ bg: menuHoverBg }} bg={bgColor}>
-                            Ajustes
-                        </MenuItem>
-                        <MenuItem _hover={{ bg: menuHoverBg }} bg={bgColor}>
-                            Cerrar sesión
-                        </MenuItem>
-                    </MenuList>
-                </Menu>
+                <Dropdown>
+                    <DropdownTrigger>
+                        <Button variant="light" >
 
+                            <FaUserCircle className="text-4xl"></FaUserCircle>
+                        </Button>
+                    </DropdownTrigger>
+                    <DropdownMenu
+                        aria-label="Usuario"
+                    >
+                        <DropdownItem key="new">Perfil</DropdownItem>
+                        <DropdownItem key="copy">Ajustes</DropdownItem>
+                        <DropdownItem key="delete" className="text-danger" color="danger">
+                            Cerrar sesión
+                        </DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
 
             </div>
         </div>

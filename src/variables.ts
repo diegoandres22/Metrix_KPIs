@@ -1,7 +1,7 @@
 
 // Etiquetas de panel de control lateral
 export const Titles = {
-    First: "Inicio",
+    start: "Inicio",
 
     salesTitle:"Ventas",
     Sales1: "Consolidado de ventas",
@@ -9,7 +9,7 @@ export const Titles = {
     Sales3: "Detallado por pago",
 
     BuyTitle: "Compras",
-    BuyDetail:"Detalle de compras",
+    BuyDetail:"Facturas de compra",
 
     customersTitle:"Clientes",
     customers1: "Detalle de clientes",
