@@ -1,6 +1,5 @@
 'use client'
 
-import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "../app/global.css";
 import NavBarLeft from "@/components/navbarLeft/page";
@@ -11,6 +10,8 @@ import { NextUIProvider } from "@nextui-org/react";
 import { SnackbarProvider } from "notistack";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -48,11 +49,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   maxSnack={2}>
 
                   <main className="flex ">
+                    <Suspense fallback={<Loading />}>
+                      <NavBarTop />
+                      <NavBarLeft />
 
-                    <NavBarTop />
-                    <NavBarLeft />
-
-                    {children}
+                      {children}
+                    </Suspense>
                   </main>
                 </SnackbarProvider>
               </ThemeProvider>

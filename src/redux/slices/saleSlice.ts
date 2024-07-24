@@ -54,6 +54,9 @@ const salesSlice = createSlice({
             const searchTerm = action.payload.toLowerCase();
             state.salesFiltered = state.allSales.filter(bill =>
                 bill.nombre_cliente.toLowerCase().includes(searchTerm) ||
+                bill.orden.toString().toLowerCase().includes(searchTerm) ||
+                bill.total_factura.toString().toLowerCase().includes(searchTerm) ||
+                bill.factura.toString().toLowerCase().includes(searchTerm) ||
                 bill.cedula_cliente.toLowerCase().includes(searchTerm)
 
             );

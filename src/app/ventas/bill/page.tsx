@@ -1,10 +1,10 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { useAppDispatch } from '@/redux/services/hooks';
 import { setTitle } from '@/redux/slices/titleSlice';
 import { Titles } from '@/variables';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner, Autocomplete, AutocompleteItem, DatePicker, Button, DateValue, Input, useDisclosure, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Divider, SortDescriptor } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner, Autocomplete, AutocompleteItem, DatePicker, Button, DateValue, Input, useDisclosure, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Divider, SortDescriptor, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { enqueueSnackbar } from 'notistack';
 import { getFacturesForPeriods } from '@/redux/services/saleService';
@@ -48,7 +48,16 @@ export default function Actual() {
 
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor | undefined>(undefined);
 
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const selectedValue = useMemo(
+    () => selectedKeys.length === 0 ? "Seleccione unidad" : selectedKeys.join(", ").replace(/_/g, " "),
+    [selectedKeys]
+  );
 
+
+  const handleSelectionChange = (keys: any) => {
+    setSelectedKeys([...keys]);
+  };
   const handleSortChange = (descriptor: SortDescriptor) => {
     setSortDescriptor(descriptor);
   };
@@ -166,28 +175,26 @@ export default function Actual() {
         </div>
 
         <div className="">
-          <Autocomplete
-            size='sm'
-            label="Tienda"
-            className="max-w-xs  " >
-
-            <AutocompleteItem key={'1'} >
-              Todos
-            </AutocompleteItem>
-            <AutocompleteItem key={'2'} >
-              Especialidades brisas y mar 2022
-            </AutocompleteItem>
-            <AutocompleteItem key={'3'} >
-              Makai
-            </AutocompleteItem>
-            <AutocompleteItem key={'4'} >
-              Don Manuel Grill
-            </AutocompleteItem>
-            <AutocompleteItem key={'5'} >
-              COFFE Macuto
-            </AutocompleteItem>
-
-          </Autocomplete>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button variant="bordered" className="capitalize">
+                {selectedValue}
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Multiple selection example"
+              variant="flat"
+              closeOnSelect={false}
+              disallowEmptySelection
+              selectionMode="multiple"
+              selectedKeys={selectedKeys}
+              onSelectionChange={handleSelectionChange}
+            >
+              {["Brisas", "Makai", "DMG", "Macuto"].map((item) => (
+                <DropdownItem key={item.toLowerCase().replace(" ", "_")}>{item}</DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
         </div>
 
         <div className="">

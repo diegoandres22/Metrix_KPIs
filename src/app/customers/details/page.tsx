@@ -2,10 +2,10 @@
 "use client";
 
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner, Input, Autocomplete, AutocompleteItem, DatePicker, Button, DateValue, useDisclosure, Modal, ModalContent, ModalHeader, ModalBody, Divider } from '@nextui-org/react';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner, Input, Autocomplete, AutocompleteItem, DatePicker, Button, DateValue, useDisclosure, Modal, ModalContent, ModalHeader, ModalBody, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { getCustomersForPeriods } from '@/redux/services/customerService';
 import { enqueueSnackbar } from 'notistack';
@@ -46,7 +46,16 @@ export default function Actual() {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor | undefined>(undefined);
+    const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+    const selectedValue = useMemo(
+        () => selectedKeys.length === 0 ? "Seleccione unidad" : selectedKeys.join(", ").replace(/_/g, " "),
+        [selectedKeys]
+    );
 
+
+    const handleSelectionChange = (keys: any) => {
+        setSelectedKeys([...keys]);
+    };
 
     const handleSortChange = (descriptor: SortDescriptor) => {
         setSortDescriptor(descriptor);
@@ -74,7 +83,7 @@ export default function Actual() {
     }, []);
 
     useEffect(() => {
-        
+
     }, [totalCustomers]);
 
     const handleInputChange = (value: DateValue, field: keyof InputValue) => {
@@ -141,13 +150,26 @@ export default function Actual() {
                 </div>
 
                 <div className=''>
-                    <Autocomplete size='sm' label='Tienda' className='max-w-xs '>
-                        <AutocompleteItem key={'1'}>Todos</AutocompleteItem>
-                        <AutocompleteItem key={'2'}>Especialidades brisas y mar 2022</AutocompleteItem>
-                        <AutocompleteItem key={'3'}>Makai</AutocompleteItem>
-                        <AutocompleteItem key={'4'}>Don Manuel Grill</AutocompleteItem>
-                        <AutocompleteItem key={'5'}>COFFE Macuto</AutocompleteItem>
-                    </Autocomplete>
+                    <Dropdown>
+                        <DropdownTrigger>
+                            <Button variant="bordered" className="capitalize">
+                                {selectedValue}
+                            </Button>
+                        </DropdownTrigger>
+                        <DropdownMenu
+                            aria-label="Multiple selection example"
+                            variant="flat"
+                            closeOnSelect={false}
+                            disallowEmptySelection
+                            selectionMode="multiple"
+                            selectedKeys={selectedKeys}
+                            onSelectionChange={handleSelectionChange}
+                        >
+                            {["Brisas", "Makai", "DMG", "Macuto"].map((item) => (
+                                <DropdownItem key={item.toLowerCase().replace(" ", "_")}>{item}</DropdownItem>
+                            ))}
+                        </DropdownMenu>
+                    </Dropdown>
                 </div>
 
                 <div className=''>

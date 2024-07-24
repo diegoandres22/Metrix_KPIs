@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from 'recharts';
 import { setTitle } from '@/redux/slices/titleSlice';
 import { Titles } from '@/variables';
@@ -8,7 +8,7 @@ import { useAppDispatch } from '@/redux/services/hooks';
 import { getTicketsForPeriods } from '@/redux/services/saleService';
 import { RootState } from '@/redux/store';
 import { useSelector } from 'react-redux';
-import { Autocomplete, AutocompleteItem, Button, DatePicker, DateValue, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip as ChakraTooltip, Card, CardBody, Tab, Tabs } from '@nextui-org/react';
+import { Autocomplete, AutocompleteItem, Button, DatePicker, DateValue, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip as ChakraTooltip, Card, CardBody, Tab, Tabs, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { enqueueSnackbar } from 'notistack';
@@ -50,7 +50,16 @@ export default function Resumen() {
 
   });
 
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const selectedValue = useMemo(
+    () => selectedKeys.length === 0 ? "Seleccione unidad" : selectedKeys.join(", ").replace(/_/g, " "),
+    [selectedKeys]
+  );
 
+
+  const handleSelectionChange = (keys: any) => {
+    setSelectedKeys([...keys]);
+  };
 
 
 
@@ -137,28 +146,26 @@ export default function Resumen() {
       <div className="flex w-[80vw] h-10% p-5 justify-center items-center gap-10">
 
         <div className="">
-          <Autocomplete
-            size='sm'
-            label="Tienda"
-            className="max-w-xs  " >
-
-            <AutocompleteItem key={'1'} >
-              Todos
-            </AutocompleteItem>
-            <AutocompleteItem key={'2'} >
-              Especialidades brisas y mar 2022
-            </AutocompleteItem>
-            <AutocompleteItem key={'3'} >
-              Makai
-            </AutocompleteItem>
-            <AutocompleteItem key={'4'} >
-              Don Manuel Grill
-            </AutocompleteItem>
-            <AutocompleteItem key={'5'} >
-              COFFE Macuto
-            </AutocompleteItem>
-
-          </Autocomplete>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button variant="bordered" className="capitalize">
+                {selectedValue}
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Multiple selection example"
+              variant="flat"
+              closeOnSelect={false}
+              disallowEmptySelection
+              selectionMode="multiple"
+              selectedKeys={selectedKeys}
+              onSelectionChange={handleSelectionChange}
+            >
+              {["Brisas", "Makai", "DMG", "Macuto"].map((item) => (
+                <DropdownItem key={item.toLowerCase().replace(" ", "_")}>{item}</DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
         </div>
 
         <div className="">
@@ -229,7 +236,7 @@ export default function Resumen() {
           </BarChart>
         </div>
         <div className="w-[20%] flex flex-col gap-4 pr-6" >
-          
+
           <Tabs aria-label="Options" placement='start' size='lg'>
             <Tab key="Año" title="Año">
 

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useAppDispatch } from '@/redux/services/hooks';
 import { setTitle } from '@/redux/slices/titleSlice';
 import { Titles } from '@/variables';
@@ -39,14 +39,19 @@ export default function Purchases() {
         to: '',
         branch: ''
     });
-     const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
 
-    const selectedValue = React.useMemo(
-        () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
+    const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+    const selectedValue = useMemo(
+        () => selectedKeys.length === 0 ? "Seleccione unidad" : selectedKeys.join(", ").replace(/_/g, " "),
         [selectedKeys]
     );
-    const dispatch = useAppDispatch();
 
+    
+    const handleSelectionChange = (keys: any) => {
+        setSelectedKeys([...keys]);
+    };
+    
+    const dispatch = useAppDispatch();
     useEffect(() => {
         dispatch(setTitle(Titles.BuyDetail))
         const { year, day, month } = today(getLocalTimeZone());
@@ -156,19 +161,10 @@ export default function Purchases() {
                 </div>
 
                 <div className=''>
-                    {/* <Autocomplete size='sm' label='Tienda' className='max-w-xs '>
-                        <AutocompleteItem key={'1'}>Todos</AutocompleteItem>
-                        <AutocompleteItem key={'2'}>Especialidades brisas y mar 2022</AutocompleteItem>
-                        <AutocompleteItem key={'3'}>Makai</AutocompleteItem>
-                        <AutocompleteItem key={'4'}>Don Manuel Grill</AutocompleteItem>
-                        <AutocompleteItem key={'5'}>COFFE Macuto</AutocompleteItem>
-                    </Autocomplete> */}
+
                     <Dropdown>
                         <DropdownTrigger>
-                            <Button
-                                variant="bordered"
-                                className="capitalize"
-                            >
+                            <Button variant="bordered" className="capitalize">
                                 {selectedValue}
                             </Button>
                         </DropdownTrigger>
@@ -179,13 +175,11 @@ export default function Purchases() {
                             disallowEmptySelection
                             selectionMode="multiple"
                             selectedKeys={selectedKeys}
-                            // onSelectionChange={setSelectedKeys}
-                            
+                            onSelectionChange={handleSelectionChange}
                         >
-                            <DropdownItem key="Especialidades">Especialidades brisas y mar</DropdownItem>
-                            <DropdownItem key="DMG">Don Manuel Grill</DropdownItem>
-                            <DropdownItem key="Makai">Makai</DropdownItem>
-                            <DropdownItem key="Macuto">COFFE Macuto Date</DropdownItem>
+                            {["Brisas", "Makai", "DMG", "Macuto"].map((item) => (
+                                <DropdownItem key={item.toLowerCase().replace(" ", "_")}>{item}</DropdownItem>
+                            ))}
                         </DropdownMenu>
                     </Dropdown>
                 </div>

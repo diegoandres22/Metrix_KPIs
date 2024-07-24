@@ -65,14 +65,14 @@ export default function NavBar() {
                   <MdKeyboardDoubleArrowRight className={getArrowClasses()} />{Titles.Sales2}
                 </Link>
               </li>
-              <li className=''>
+              {/* <li className=''>
                 <Link
                   href="/ventas/metodos"
                   className={` ${getLinkClasses(Titles.Sales3)} text-gray-400`}
                 >
                   <MdKeyboardDoubleArrowRight className={getArrowClasses()} /> {Titles.Sales3}
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </AccordionPanel>
         </AccordionItem>
