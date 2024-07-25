@@ -21,7 +21,7 @@ export default function navbarTop() {
 
     return (
         <div className="">
-            <div className="flex absolute w-screen h-[4em] bg-white bg-opacity-10 justify-between p-5 ">
+            <div className="flex absolute w-screen h-[4em] bg-white bg-opacity-10 justify-between p-5 z-1">
                 <p className=''>Metrix KPIs</p>
                 <p className=''>{title.title}</p>
 

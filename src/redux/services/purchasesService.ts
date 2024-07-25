@@ -23,7 +23,7 @@ export const getPurchasesForPeriods = createAsyncThunk<Factura_compras[], DatePa
 
             const purchasesArray: Factura_compras[] = [];
 
-            arrPurchases.forEach((ticket: Purchase) => {
+            arrPurchases.forEach((purchase: Purchase) => {
 
                 const {
                     header_id,
@@ -44,7 +44,7 @@ export const getPurchasesForPeriods = createAsyncThunk<Factura_compras[], DatePa
                     product_cost_total,
                     item_net_price,
                     exchange_date_day,
-                } = ticket;
+                } = purchase;
 
                 let existingInvoice = purchasesArray.find((invoice) => invoice.factura_num === number_document);
 

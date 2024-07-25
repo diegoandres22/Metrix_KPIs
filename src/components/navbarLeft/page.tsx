@@ -12,7 +12,8 @@ import { BsCashCoin } from "react-icons/bs";
 import { IoMdCart } from "react-icons/io";
 import { FaUsers } from "react-icons/fa6";
 import { IoFastFood } from "react-icons/io5";
-import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+import { MdKeyboardDoubleArrowRight, MdPayment } from "react-icons/md";
+import { SiHomeassistantcommunitystore } from "react-icons/si";
 
 export default function NavBar() {
 
@@ -32,7 +33,7 @@ export default function NavBar() {
 
 
   return (
-    <div className='flex w-[20vw] h-screen bg-white bg-opacity-10 flex-col p-5 pt-20 gap-5 '>
+    <div className='flex w-[20vw] h-screen bg-white bg-opacity-10 flex-col p-5 pt-20 gap-5 overflow-auto'>
       <Link
         href="/start" className={getLinkClasses1(Titles.start)}
       >
@@ -51,7 +52,7 @@ export default function NavBar() {
             <ul className='flex flex-col gap-4 mt-4 ' >
               <li >
                 <Link
-                  href="/ventas/resumen"
+                  href="/sales/resumen"
                   className={` ${getLinkClasses(Titles.Sales1)} text-gray-400`}
                 >
                   <MdKeyboardDoubleArrowRight className={getArrowClasses()} /> {Titles.Sales1}
@@ -59,24 +60,18 @@ export default function NavBar() {
               </li>
               <li >
                 <Link
-                  href="/ventas/bill"
+                  href="/sales/bill"
                   className={` ${getLinkClasses(Titles.Sales2)} text-gray-400`}
                 >
                   <MdKeyboardDoubleArrowRight className={getArrowClasses()} />{Titles.Sales2}
                 </Link>
               </li>
-              {/* <li className=''>
-                <Link
-                  href="/ventas/metodos"
-                  className={` ${getLinkClasses(Titles.Sales3)} text-gray-400`}
-                >
-                  <MdKeyboardDoubleArrowRight className={getArrowClasses()} /> {Titles.Sales3}
-                </Link>
-              </li> */}
+
             </ul>
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
+
 
       <Accordion allowMultiple >
         <AccordionItem className='border-none'>
@@ -123,6 +118,58 @@ export default function NavBar() {
         </AccordionItem>
       </Accordion>
 
+      <Accordion allowMultiple >
+        <AccordionItem className='border-none'>
+          <AccordionButton >
+            <Box as='span' flex='1' textAlign='left' className=' flex gap-2 items-center'>
+              <MdPayment />  {Titles.paymentsTitle}
+            </Box>
+            <AccordionIcon />
+          </AccordionButton>
+          <AccordionPanel >
+            <ul className='flex flex-col gap-4 mt-4 ' >
+              <li  >
+                <Link href="/payments/metods" className={` ${getLinkClasses(Titles.payments1)} text-gray-400`}                >
+                  <MdKeyboardDoubleArrowRight className={getArrowClasses()} />  {Titles.payments1}
+                </Link>
+              </li>
+
+
+            </ul>
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+
+      <Accordion allowMultiple >
+        <AccordionItem className='border-none'>
+          <AccordionButton >
+            <Box as='span' flex='1' textAlign='left' className=' flex gap-2 items-center'>
+              <SiHomeassistantcommunitystore />  {Titles.businessTitle}
+            </Box>
+            <AccordionIcon />
+          </AccordionButton>
+          <AccordionPanel >
+            <ul className='flex flex-col gap-4 mt-4 ' >
+              <li  >
+                <Link href="/business/status" className={` ${getLinkClasses(Titles.businessStatus)} text-gray-400`}                >
+                  <MdKeyboardDoubleArrowRight className={getArrowClasses()} />  {Titles.businessStatus}
+                </Link>
+              </li>
+              <li  >
+                <Link href="/business/summary" className={` ${getLinkClasses(Titles.businessAuditSummary)} text-gray-400`}                >
+                  <MdKeyboardDoubleArrowRight className={getArrowClasses()} />  {Titles.businessAuditSummary}
+                </Link>
+              </li><li  >
+                <Link href="/business/audits" className={` ${getLinkClasses(Titles.businessAudit)} text-gray-400`}                >
+                  <MdKeyboardDoubleArrowRight className={getArrowClasses()} />  {Titles.businessAudit}
+                </Link>
+              </li>
+
+            </ul>
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+
       <Link
         href="/products" className=' flex gap-2 items-center'
       >
@@ -135,11 +182,7 @@ export default function NavBar() {
         {Titles.Seventh}
       </Link>
 
-      <Link
-        href="/audits"
-      >
-        {Titles.Nineth}
-      </Link>
+
     </div>
   );
 }

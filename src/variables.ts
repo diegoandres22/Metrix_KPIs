@@ -6,7 +6,6 @@ export const Titles = {
     salesTitle:"Ventas",
     Sales1: "Consolidado de ventas",
     Sales2: "Detallado por facturas",
-    Sales3: "Detallado por pago",
 
     BuyTitle: "Compras",
     BuyDetail:"Facturas de compra",
@@ -14,11 +13,18 @@ export const Titles = {
     customersTitle:"Clientes",
     customers1: "Detalle de clientes",
     
-    Fifth: "Productos",
-    Sixth: "Clientes",
+    paymentsTitle: "Pagos",
+    payments1: "Metodos de pago",
+
+
     Seventh: "Promociones",
-    Eighth: "Libro Rojo",
-    Nineth: "Auditorias"
+    
+    businessTitle: "Unidades de negocios",
+    businessStatus: "Estado",
+    businessAuditSummary: "Resumen de audiciones",
+    businessAudit: "Auditar",
+    
+    Fifth: "Productos",
 };
 
 //Variables Endspoints para consumo de api 

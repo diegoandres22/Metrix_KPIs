@@ -23,7 +23,7 @@ export const getCustomersForPeriods = createAsyncThunk<Customers[], DateParams, 
 
             const customersArray: Customers[] = [];
 
-            arrTickets.forEach((ticket: Ticket2) => {
+            arrTickets.forEach((customer: Ticket2) => {
 
                 const {
                     order_id,
@@ -44,7 +44,7 @@ export const getCustomersForPeriods = createAsyncThunk<Customers[], DateParams, 
                     product_tax_value,
                     service_value,
                     total
-                } = ticket;
+                } = customer;
 
 
                 let existingInvoice = customersArray.find((invoice) => invoice.numero_de_cedula === customer_identification);
