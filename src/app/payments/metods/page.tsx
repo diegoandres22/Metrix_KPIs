@@ -4,14 +4,15 @@
 import { useAppDispatch } from '@/redux/services/hooks';
 import { setTitle } from '@/redux/slices/titleSlice';
 import { Titles } from '@/variables';
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, DatePicker, Button, Input, DateValue, Table, TableHeader, TableColumn, TableRow, TableBody, TableCell } from '@nextui-org/react';
-import React, { useEffect, useMemo, useState } from 'react'
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, DatePicker, Button, DateValue, Table, TableHeader, TableColumn, TableRow, TableBody, TableCell, SortDescriptor } from '@nextui-org/react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getLocalTimeZone, today } from '@internationalized/date';
 import { enqueueSnackbar } from 'notistack';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { getPaymentForPeriods } from '@/redux/services/paymentService';
 import { Payment } from '@/types/paymentInt';
+import { removePaymentsForPeriods } from '@/redux/slices/paymentSlice';
 
 
 interface InputValue {
@@ -26,12 +27,16 @@ export default function Payments() {
     const dispatch = useAppDispatch();
     const loading = useSelector((state: RootState) => state.payments.loading);
     const paymentsSummary = useSelector((state: RootState) => state.payments.paymentSummary);
+    const paymentsSummaryLoading = useSelector((state: RootState) => state.payments.loading);
     const [inputValue, setInputValue] = useState<InputValue>({
         type: '',
         from: '',
         to: '',
         branch: ''
     });
+
+
+    const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor | undefined>(undefined);
 
     const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
     const selectedValue = useMemo(
@@ -56,8 +61,14 @@ export default function Payments() {
         };
 
         setInputValue(newInputValue);
-
+        return () => {
+            dispatch(removePaymentsForPeriods())
+        };
     }, []);
+    useEffect(() => {
+
+
+    }, [paymentsSummary]);
 
     const handleSelectionChange = (keys: any) => {
         setSelectedKeys([...keys]);
@@ -85,7 +96,23 @@ export default function Payments() {
             dispatch(getPaymentForPeriods({ dateFrom: inputValue.from, dateEnd: inputValue.to }));
         }
     };
+    const handleSortChange = (descriptor: SortDescriptor) => {
+        setSortDescriptor(descriptor);
+    };
+    const sortedBills = paymentsSummary.slice().sort((a, b) => {
+        if (!sortDescriptor || !sortDescriptor.column) return 0;
 
+        const aValue = a[sortDescriptor.column as keyof Payment];
+        const bValue = b[sortDescriptor.column as keyof Payment];
+
+        if (aValue === undefined || bValue === undefined) return 0;
+
+        if (sortDescriptor.direction === "ascending") {
+            return aValue > bValue ? 1 : -1;
+        } else {
+            return aValue < bValue ? 1 : -1;
+        }
+    });
     return (
         <div className='mt-[4em] flex flex-col '>
 
@@ -153,16 +180,25 @@ export default function Payments() {
             </div>
 
             <div className="flex w-[70vw] overflow-auto mx-auto">
-                <Table removeWrapper isHeaderSticky aria-label="pagos" classNames={{
-                    base: "max-h-[420px]",
-                }}>
+                <Table removeWrapper
+                    isHeaderSticky
+                    aria-label="pagos"
+                    sortDescriptor={sortDescriptor}
+                    onSortChange={handleSortChange}
+                    classNames={{
+                        base: "max-h-[420px]",
+                    }}>
                     <TableHeader>
-                        <TableColumn>Fecha </TableColumn>
+                        <TableColumn key="bill_datetime_string" allowsSorting >Fecha </TableColumn>
                         <TableColumn>Moneda </TableColumn>
                         <TableColumn>Forma de pago</TableColumn>
-                        <TableColumn>Total </TableColumn>
+                        <TableColumn key="amount_base_currency" allowsSorting>Total </TableColumn>
                     </TableHeader>
-                    <TableBody items={paymentsSummary}>
+                    <TableBody
+
+                        isLoading={paymentsSummaryLoading}
+                        items={sortedBills}
+                    >
                         {(item: Payment) => (
                             <TableRow key={item.bill_id} aria-label='Pagos'>
                                 <TableCell>{item.bill_datetime_string}</TableCell>

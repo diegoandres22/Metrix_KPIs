@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useAppDispatch } from '@/redux/services/hooks';
 import { setTitle } from '@/redux/slices/titleSlice';
 import { Titles } from '@/variables';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner, Autocomplete, AutocompleteItem, DatePicker, Button, DateValue, Input, useDisclosure, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Divider, SortDescriptor, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, ScrollShadow } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner, DatePicker, Button, DateValue, Input, useDisclosure, Modal, ModalBody, ModalContent, ModalHeader, Divider, SortDescriptor, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, } from "@nextui-org/react";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { enqueueSnackbar } from 'notistack';
 import { getFacturesForPeriods } from '@/redux/services/saleService';
@@ -142,10 +142,6 @@ export default function Actual() {
     }
   };
 
-  const onClear = React.useCallback(() => {
-  }, [])
-
-
 
 
   const handleOpen = (backdrop: any) => {
@@ -246,8 +242,11 @@ export default function Actual() {
           onSortChange={handleSortChange}
         >
           <TableHeader>
-            <TableColumn key="factura" allowsSorting>
-              Factura
+            <TableColumn key="fecha" allowsSorting>
+              Fecha
+            </TableColumn>
+            <TableColumn key="orden" allowsSorting>
+              Nro. Órden
             </TableColumn>
             <TableColumn key="nombre_cliente" allowsSorting>
               Nombre
@@ -257,15 +256,6 @@ export default function Actual() {
             </TableColumn>
             <TableColumn key="total_productos" allowsSorting>
               Total productos
-            </TableColumn>
-            <TableColumn key="neto_factura" allowsSorting>
-              Neto factura
-            </TableColumn>
-            <TableColumn key="impuesto_factura" allowsSorting>
-              Impuesto factura
-            </TableColumn>
-            <TableColumn key="servicio" allowsSorting>
-              Servicio
             </TableColumn>
             <TableColumn key="total_factura" allowsSorting>
               Total factura
@@ -286,13 +276,11 @@ export default function Actual() {
                   handleOpen(item)
                   setBillValue(item)
                 }} aria-label="Ver factura"  >
-                <TableCell>{item.factura}</TableCell>
+                <TableCell>{item.fecha}</TableCell>
+                <TableCell>{item.orden}</TableCell>
                 <TableCell>{item.nombre_cliente}</TableCell>
                 <TableCell>{item.cedula_cliente}</TableCell>
                 <TableCell >{item.total_productos.length}</TableCell>
-                <TableCell>{item.neto_factura}</TableCell>
-                <TableCell>{item.impuesto_factura}</TableCell>
-                <TableCell>{item.servicio}</TableCell>
                 <TableCell>{item.total_factura}</TableCell>
 
               </TableRow>

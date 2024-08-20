@@ -17,7 +17,11 @@ const initialState: PaymentState = {
 const paymentSlice = createSlice({
     name: 'payment',
     initialState,
-    reducers: {},
+    reducers: {
+        removePaymentsForPeriods(state) {
+            state.paymentSummary = [];
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getPaymentForPeriods.pending, (state) => {
@@ -34,5 +38,7 @@ const paymentSlice = createSlice({
             });
     },
 });
+export const { removePaymentsForPeriods } = paymentSlice.actions;
+
 
 export default paymentSlice.reducer;
